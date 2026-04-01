@@ -5,6 +5,7 @@ Streamlit + Plotly 차트 컴포넌트 — 화이트/블루 클린 디자인.
 
 from __future__ import annotations
 
+import re
 import plotly.graph_objects as go
 import streamlit as st
 import pandas as pd
@@ -255,13 +256,14 @@ def rsi_chart_modern(price_df: pd.DataFrame) -> go.Figure:
 # ══════════════════════════════════════════════════════════════════════════════
 
 def radar_chart_modern(result: dict) -> go.Figure:
-    categories = ["기술적 분석", "재무 분석", "AI 심리", "수급", "기술적 분석"]
+    categories = ["기술적 분석", "재무 분석", "AI 심리", "수급", "기술적 분석"]  # 마지막은 레이더 폐합용
+    safe = {k: result.get(k, {}).get("score", 0) for k in ["technical", "fundamental", "sentiment", "flow"]}
     values = [
-        result["technical"]["score"],
-        result["fundamental"]["score"],
-        result["sentiment"]["score"],
-        result["flow"]["score"],
-        result["technical"]["score"],
+        safe["technical"],
+        safe["fundamental"],
+        safe["sentiment"],
+        safe["flow"],
+        safe["technical"],  # 폐합
     ]
 
     score = result["golden_score"]
@@ -318,30 +320,31 @@ def layer_score_bar(result: dict) -> None:
     from config import WEIGHTS
 
     layers = [
-        ("🔵 기술적 분석", result["technical"]["score"],  int(WEIGHTS["technical"]   * 100), C_PRIMARY),
-        ("🟢 재무 분석",   result["fundamental"]["score"], int(WEIGHTS["fundamental"] * 100), C_GREEN),
-        ("🟣 AI 심리",     result["sentiment"]["score"],   int(WEIGHTS["sentiment"]   * 100), C_PURPLE),
-        ("🟠 수급",        result["flow"]["score"],        int(WEIGHTS["flow"]        * 100), C_ORANGE),
+        ("🔵 기술적 분석", result.get("technical", {}).get("score", 0),  int(WEIGHTS["technical"]   * 100), C_PRIMARY),
+        ("🟢 재무 분석",   result.get("fundamental", {}).get("score", 0), int(WEIGHTS["fundamental"] * 100), C_GREEN),
+        ("🟣 AI 심리",     result.get("sentiment", {}).get("score", 0),   int(WEIGHTS["sentiment"]   * 100), C_PURPLE),
+        ("🟠 수급",        result.get("flow", {}).get("score", 0),        int(WEIGHTS["flow"]        * 100), C_ORANGE),
     ]
 
-    # 각 레이어를 개별 st.markdown 호출로 렌더링 (HTML 깨짐 방지)
+    # 전체 HTML을 한 번에 렌더링 (st.markdown 4회 → 1회로 통합)
+    rows_html = ""
     for name, score, weight, color in layers:
         pct = max(0, min(100, score))
-        st.markdown(f"""<div style="display:flex; align-items:center; gap:14px; padding:11px 0; border-bottom:1px solid #F3F4F6">
+        rows_html += f"""<div style="display:flex; align-items:center; gap:14px; padding:11px 0; border-bottom:1px solid #F3F4F6">
   <div style="font-size:0.83rem; font-weight:600; color:#374151; width:110px; flex-shrink:0">{name}</div>
   <div style="flex:1; height:7px; background:#F3F4F6; border-radius:4px; overflow:hidden">
     <div style="height:100%; width:{pct}%; background:{color}; border-radius:4px"></div>
   </div>
   <div style="font-size:0.85rem; font-weight:700; color:{color}; width:42px; text-align:right; flex-shrink:0">{score:.0f}</div>
   <div style="font-size:0.75rem; color:#9CA3AF; width:32px; text-align:right; flex-shrink:0">{weight}%</div>
-</div>""", unsafe_allow_html=True)
+</div>"""
 
-    # 기여점수 합계
-    total = sum(s * w / 100 for _, s, w, _ in layers)
-    st.markdown(f"""<div style="padding:12px 0 0; display:flex; justify-content:space-between; align-items:center">
+    total = sum(score * weight / 100 for _, score, weight, _ in layers)
+    rows_html += f"""<div style="padding:12px 0 0; display:flex; justify-content:space-between; align-items:center">
   <div style="font-size:0.82rem; font-weight:600; color:#6B7280">합산 기여 점수</div>
   <div style="font-size:1.2rem; font-weight:800; color:#1D4ED8">{total:.1f}점</div>
-</div>""", unsafe_allow_html=True)
+</div>"""
+    st.markdown(rows_html, unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -389,7 +392,7 @@ def sell_gauge_chart(score: float, signal: str, color: str) -> go.Figure:
         paper_bgcolor = "rgba(0,0,0,0)",
         font          = FONT,
         annotations   = [dict(
-            text      = signal.replace("🔴", "").replace("🟠", "").replace("🟡", "").replace("🟢", "").strip(),
+            text      = re.sub(r'[^\x00-\x7F\uAC00-\uD7A3\u3040-\u30FF\u4E00-\u9FFF ]', '', signal).strip(),
             x=0.5, y=-0.08,
             showarrow = False,
             font      = dict(size=12, color=color, family="Inter, sans-serif"),

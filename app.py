@@ -244,7 +244,7 @@ page_mode = st.radio(
 #  페이지 2: 시장 히트맵 (Finviz) & AI 추천
 # ══════════════════════════════════════════════════════════════════════════════
 
-if page_mode == "🗺️ 시장 히트맵 & 추천":
+elif page_mode == "🗺️ 시장 히트맵 & 추천":
     st.markdown("""<div class="section-card" style="padding:14px 20px">
   <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px">
     <div class="section-title" style="margin:0; font-size:1.15rem">🗺️ Market Heatmap & AI Recommendations</div>
@@ -327,7 +327,7 @@ if page_mode == "🗺️ 시장 히트맵 & 추천":
 #  페이지 3: 데일리 브리핑
 # ══════════════════════════════════════════════════════════════════════════════
 
-if page_mode == "📋 데일리 브리핑":
+elif page_mode == "📋 데일리 브리핑":
     st.markdown("""<div class="section-card" style="padding:14px 20px">
   <div class="section-title" style="margin:0; font-size:1.15rem">📋 데일리 마켓 브리핑 — 미국/한국 지수 분석</div>
   <div class="section-sub" style="margin-top:4px">Gemini AI가 분석하는 오늘의 시장 동향, 상승/하락 이유, 내일 전망</div>
@@ -463,7 +463,7 @@ if page_mode == "📋 데일리 브리핑":
 #  페이지 4: 투자 도구 (백테스팅, 실적캘린더, 내부자, 차트패턴)
 # ══════════════════════════════════════════════════════════════════════════════
 
-if page_mode == "🛠️ 투자 도구":
+elif page_mode == "🛠️ 투자 도구":
     st.markdown("""<div class="section-card" style="padding:14px 20px">
   <div class="section-title" style="margin:0; font-size:1.15rem">🛠️ 투자 도구 모음</div>
   <div class="section-sub" style="margin-top:4px">백테스팅 · 실적 캘린더 · 내부자 거래 · 차트 패턴 분석</div>
@@ -733,7 +733,7 @@ if page_mode == "🛠️ 투자 도구":
 #  페이지 1: 종목 분석 Dashboard
 # ══════════════════════════════════════════════════════════════════════════════
 
-if page_mode == "📈 종목 분석 (Dashboard)":
+else:  # 📈 종목 분석 (Dashboard)
     # ── 세션 상태 초기화 ──────────────────────────────────────────────────
     if "detail_stock" not in st.session_state:
         st.session_state.detail_stock = None

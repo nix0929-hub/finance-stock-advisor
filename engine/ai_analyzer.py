@@ -13,6 +13,16 @@ import anthropic
 
 from config import ANTHROPIC_API_KEY
 
+# ── Anthropic 클라이언트 싱글턴 (호출마다 재생성 방지) ───────────────────────
+_client: anthropic.Anthropic | None = None
+
+def _get_client() -> anthropic.Anthropic:
+    global _client
+    if _client is None:
+        _client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+    return _client
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 #  프롬프트 설계
 # ══════════════════════════════════════════════════════════════════════════════
@@ -77,7 +87,7 @@ def analyze_sentiment(
 """
 
     try:
-        client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+        client = _get_client()
         message = client.messages.create(
             model="claude-haiku-4-5-20251001",
             max_tokens=1024,
