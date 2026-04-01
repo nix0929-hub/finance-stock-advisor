@@ -244,7 +244,7 @@ page_mode = st.radio(
 #  페이지 2: 시장 히트맵 (Finviz) & AI 추천
 # ══════════════════════════════════════════════════════════════════════════════
 
-elif page_mode == "🗺️ 시장 히트맵 & 추천":
+if page_mode == "🗺️ 시장 히트맵 & 추천":
     st.markdown("""<div class="section-card" style="padding:14px 20px">
   <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px">
     <div class="section-title" style="margin:0; font-size:1.15rem">🗺️ Market Heatmap & AI Recommendations</div>
