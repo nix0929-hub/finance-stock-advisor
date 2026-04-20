@@ -19,8 +19,16 @@ _client: anthropic.Anthropic | None = None
 def _get_client() -> anthropic.Anthropic:
     global _client
     if _client is None:
+        if not ANTHROPIC_API_KEY:
+            raise ValueError("ANTHROPIC_API_KEY 미설정 — config.py 또는 환경변수를 확인하세요.")
         _client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
     return _client
+
+
+def reset_client() -> None:
+    """API 키 변경 시 싱글턴 클라이언트를 리셋하여 새 키를 적용."""
+    global _client
+    _client = None
 
 
 # ══════════════════════════════════════════════════════════════════════════════

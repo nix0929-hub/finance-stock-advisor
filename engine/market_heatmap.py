@@ -40,25 +40,25 @@ QUICK_TICKERS = {
         "BMY","ISRG","GILD","MDT","SYK","VRTX","REGN","BSX","EW","ZTS",
         # Financials
         "BRK-B","JPM","V","MA","BAC","WFC","GS","MS","AXP","BLK",
-        "SCHW","C","SPGI","PGR","CME","ICE","MCO","CB","MMC","AON",
+        "SCHW","C","SPGI","PGR","CME","ICE","MCO","CB","AON",
         # Consumer
         "HD","MCD","NKE","SBUX","LOW","TJX","COST","PG","KO","PEP",
         "PM","CL","WMT","TGT","ROST","DG","DLTR","EL","MO","KMB",
         # Energy
-        "XOM","CVX","COP","EOG","SLB","MPC","PSX","VLO","OXY","HES",
+        "XOM","CVX","COP","EOG","SLB","MPC","PSX","VLO","OXY",
         "DVN","HAL","FANG","BKR",
         # Industrials
         "CAT","UNP","HON","RTX","DE","BA","GE","LMT","MMM","UPS",
         "FDX","WM","EMR","ITW","ETN","PH","ROK","CARR","GD","NOC",
         # Communication
-        "GOOGL","NFLX","DIS","CMCSA","T","VZ","TMUS","CHTR","EA","ATVI",
+        "GOOGL","NFLX","DIS","CMCSA","T","VZ","TMUS","CHTR","EA",
         # Real Estate / Utilities
         "PLD","AMT","CCI","EQIX","SPG","NEE","DUK","SO","D","AEP",
     ],
     "russell2000": [
         "SMCI","BOOT","SHAK","PLNT","SM","NTNX","BWXT","CAVA",
         "WING","EAT","MTDR","PI","RBC","TXRH","FFIN","SFBS",
-        "PNFP","IBOC","WSFS","BANR","GMS","AAON","MATX","AWI",
+        "PNFP","IBOC","WSFS","BANR","AAON","MATX","AWI",
         "SRPT","PCVX","KROS","VERA","CWAN","BRZE","ALKT","CAMT",
         "RRC","CNX","TRGP","VNOM","HALO","ENSG","MASI","OMCL",
         "FNB","SPSC","DIN","GPOR","RXRX","NUVB",

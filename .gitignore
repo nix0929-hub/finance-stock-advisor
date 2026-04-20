@@ -1,0 +1,17 @@
+# 보안
+.streamlit/secrets.toml
+
+# 캐시
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# 개인 설정
+CLAUDE.md
+qa_screenshots/
+
+# 환경
+.env
+.venv/
+venv/

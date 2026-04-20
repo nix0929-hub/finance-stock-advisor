@@ -16,166 +16,373 @@ st.set_page_config(
 )
 
 # ══════════════════════════════════════════════════════════════════════════════
-#  Boltshift 스타일 전역 CSS
+#  Superhuman × Spotify 하이브리드 CSS
 # ══════════════════════════════════════════════════════════════════════════════
 st.markdown("""
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
-  /* ── 글로벌: 라벤더 그라디언트 배경 ── */
+  /* ─────────────────────────────────────────────────────────────────────────
+     TOKENS  (Superhuman dark-purple × Spotify immersive-black)
+     ───────────────────────────────────────────────────────────────────────── */
+  :root {
+    /* Surfaces */
+    --bg-base:    #0f0e17;          /* near-black with purple tint */
+    --bg-hero:    #1b1938;          /* Superhuman dark-purple hero */
+    --bg-card:    #181820;          /* Spotify card dark */
+    --bg-panel:   #1e1d2b;          /* elevated panel */
+    --bg-hover:   #252436;          /* hover state */
+
+    /* Brand accents */
+    --green:      #1ed760;          /* Spotify green — buy / positive */
+    --green-dim:  rgba(30,215,96,.12);
+    --lavender:   #cbb7fb;          /* Superhuman lavender — headers/links */
+    --lavender-dim: rgba(203,183,251,.12);
+    --cream:      #e9e5dd;          /* Superhuman warm cream — text / CTA */
+    --red:        #ff4d4d;          /* sell / negative */
+    --red-dim:    rgba(255,77,77,.12);
+    --amber:      #f5a623;          /* caution */
+
+    /* Text */
+    --text-primary:   #e9e5dd;      /* warm cream — main body */
+    --text-secondary: rgba(233,229,221,.55);
+    --text-muted:     rgba(233,229,221,.35);
+
+    /* Structure */
+    --radius-sm:  8px;
+    --radius-md:  16px;
+    --shadow-card: 0 8px 24px rgba(0,0,0,.50);
+    --shadow-glow-green:   0 0 20px rgba(30,215,96,.18);
+    --shadow-glow-lavender: 0 0 20px rgba(203,183,251,.15);
+  }
+
+  /* ── Global ── */
   .stApp {
-    background: linear-gradient(160deg, #E8E0F0 0%, #D5E8F0 35%, #E0EDE8 65%, #F0E8E0 100%) !important;
-    font-family: 'Inter', sans-serif;
+    background: var(--bg-base) !important;
+    font-family: 'Inter', sans-serif !important;
+    color: var(--text-primary) !important;
     min-height: 100vh;
   }
   #MainMenu, footer, header { visibility: hidden !important; height: 0 !important; }
-  .block-container { padding: 1rem 2rem 2rem 2rem !important; max-width: 1440px; }
+  .block-container { padding: 0.75rem 2rem 2rem 2rem !important; max-width: 1440px; }
   div[data-testid="stHeader"],
   div[data-testid="stToolbar"],
   div[data-testid="stDecoration"],
   .stDeployButton { display: none !important; }
 
-  /* ── 상단 네비게이션 바 (글래스) ── */
+  /* text colour cascade */
+  p, span, div, label, li { color: var(--text-primary); }
+
+  /* ── Top Navigation Bar ── */
   .top-nav {
-    background: rgba(255,255,255,0.65);
-    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255,255,255,0.5);
-    border-radius: 20px; padding: 14px 24px; margin-bottom: 20px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    background: var(--bg-hero);
+    border: 1px solid rgba(203,183,251,.15);
+    border-radius: var(--radius-md);
+    padding: 13px 22px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow-card);
     display: flex; align-items: center; justify-content: space-between;
   }
-  .nav-logo { display: flex; align-items: center; gap: 10px; font-size: 1.15rem; font-weight: 800; color: #1E293B; text-decoration: none; }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.1rem; font-weight: 800;
+    color: var(--cream); text-decoration: none;
+    letter-spacing: -0.02em;
+  }
   .nav-logo-icon {
-    background: linear-gradient(135deg, #14B8A6, #0D9488);
-    color: white; border-radius: 12px; width: 38px; height: 38px;
+    background: linear-gradient(135deg, #1ed760, #17b34f);
+    color: #0f0e17; border-radius: var(--radius-sm);
+    width: 36px; height: 36px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.15rem; box-shadow: 0 3px 12px rgba(20,184,166,0.4);
+    font-size: 1.05rem; box-shadow: var(--shadow-glow-green);
+    font-weight: 900;
   }
   .nav-links { display: flex; gap: 4px; }
-  .nav-link { padding: 7px 18px; border-radius: 22px; font-size: 0.84rem; font-weight: 500; color: #64748B; cursor: pointer; }
-  .nav-link.active { background: #1E293B; color: white; }
+  .nav-link {
+    padding: 6px 16px; border-radius: 9999px;
+    font-size: 0.82rem; font-weight: 500;
+    color: var(--text-secondary); cursor: pointer;
+    transition: all .15s;
+  }
+  .nav-link.active {
+    background: var(--lavender); color: #0f0e17;
+    font-weight: 700;
+  }
+  .nav-link:hover:not(.active) { background: var(--bg-hover); color: var(--cream); }
   .nav-right { display: flex; align-items: center; gap: 12px; }
-  .nav-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #14B8A6, #0EA5E9); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.85rem; }
-  .nav-user-name { font-size: 0.85rem; font-weight: 600; color: #1E293B; }
-  .nav-user-sub  { font-size: 0.73rem; color: #94A3B8; }
+  .nav-avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--lavender), #9d7ef0);
+    display: flex; align-items: center; justify-content: center;
+    color: #0f0e17; font-weight: 800; font-size: 0.78rem;
+  }
+  .nav-user-name { font-size: 0.83rem; font-weight: 600; color: var(--cream); }
+  .nav-user-sub  { font-size: 0.71rem; color: var(--text-muted); }
 
-  /* ── 글래스 카드 (핵심) ── */
+  /* ── Glass card (generic) ── */
   .glass {
-    background: rgba(255,255,255,0.55);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255,255,255,0.6);
-    border-radius: 20px; padding: 22px 24px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.05);
-    margin-bottom: 14px;
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: var(--radius-md);
+    padding: 20px 22px;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 12px;
     transition: box-shadow .2s, transform .2s;
   }
-  .glass:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.09); transform: translateY(-2px); }
+  .glass:hover {
+    box-shadow: var(--shadow-card), var(--shadow-glow-lavender);
+    transform: translateY(-2px);
+  }
 
-  /* ── 대형 피처드 카드 (상단 2열) ── */
+  /* ── Featured card ── */
   .featured {
-    background: rgba(255,255,255,0.6);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255,255,255,0.7);
-    border-radius: 24px; padding: 24px 28px;
-    box-shadow: 0 6px 30px rgba(0,0,0,0.07);
+    background: var(--bg-panel);
+    border: 1px solid rgba(203,183,251,.1);
+    border-radius: var(--radius-md);
+    padding: 22px 26px;
+    box-shadow: var(--shadow-card);
     position: relative; overflow: hidden;
   }
+  .featured::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--lavender), var(--green));
+  }
   .featured-thumb {
-    width: 80px; height: 80px; border-radius: 18px;
+    width: 72px; height: 72px; border-radius: var(--radius-sm);
     display: flex; align-items: center; justify-content: center;
-    font-size: 2rem; flex-shrink: 0;
+    font-size: 1.8rem; flex-shrink: 0;
+    background: var(--bg-hover);
   }
 
-  /* ── 4열 그리드 종목 카드 ── */
-  .stock-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 16px; }
+  /* ── Stock grid cards ── */
+  .stock-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 14px; }
   @media (max-width: 1024px) { .stock-grid { grid-template-columns: repeat(2, 1fr); } }
   .stock-card {
-    background: rgba(255,255,255,0.6);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.6);
-    border-radius: 18px; padding: 18px 20px;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: var(--radius-md);
+    padding: 16px 18px;
+    box-shadow: var(--shadow-card);
     transition: all .2s;
   }
-  .stock-card:hover { box-shadow: 0 6px 28px rgba(0,0,0,0.09); transform: translateY(-2px); }
-  .stock-card-alert { border: 1.5px solid rgba(239,68,68,0.3); }
+  .stock-card:hover {
+    border-color: rgba(203,183,251,.25);
+    box-shadow: var(--shadow-card), var(--shadow-glow-lavender);
+    transform: translateY(-2px);
+  }
+  .stock-card-alert { border-color: rgba(255,77,77,.3) !important; }
   .stock-thumb {
-    width: 44px; height: 44px; border-radius: 12px;
+    width: 42px; height: 42px; border-radius: var(--radius-sm);
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.2rem; flex-shrink: 0;
+    font-size: 1.1rem; flex-shrink: 0;
+    background: var(--bg-hover);
   }
 
-  /* ── 진행률 바 (세그먼트) ── */
+  /* ── Progress bar ── */
   .prog-bar { display: flex; gap: 3px; margin-top: 8px; }
-  .prog-seg { height: 6px; border-radius: 3px; flex: 1; }
+  .prog-seg { height: 4px; border-radius: 2px; flex: 1; }
 
-  /* ── 상태 도트 ── */
-  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
-  .dot-green { background: #14B8A6; }
-  .dot-red   { background: #EF4444; }
-  .dot-yellow{ background: #F59E0B; }
+  /* ── Status dots ── */
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .dot-green  { background: var(--green); }
+  .dot-red    { background: var(--red); }
+  .dot-yellow { background: var(--amber); }
 
-  /* ── KPI 카드 (분석 결과용) ── */
-  .kpi-row { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 14px; margin-bottom: 16px; }
-  .kpi-card { background: rgba(255,255,255,0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.6); border-radius: 18px; padding: 20px 22px; position: relative; overflow: hidden; }
-  .kpi-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); }
-  .kpi-card-primary { background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%); border: none; }
-  .kpi-label { font-size: 0.8rem; font-weight: 500; color: #64748B; margin-bottom: 6px; }
-  .kpi-label-primary { color: rgba(255,255,255,0.8); }
-  .kpi-value { font-size: 2rem; font-weight: 800; color: #1E293B; line-height: 1.1; }
-  .kpi-value-primary { color: white; }
-  .kpi-sub { font-size: 0.76rem; color: #94A3B8; margin-top: 4px; }
-  .kpi-sub-primary { color: rgba(255,255,255,0.65); }
-  .kpi-badge { display: inline-flex; align-items: center; gap: 3px; padding: 3px 9px; border-radius: 20px; font-size: 0.74rem; font-weight: 600; margin-top: 8px; }
-  .badge-up   { background: #CCFBF1; color: #0D9488; }
-  .badge-down { background: #FEE2E2; color: #DC2626; }
-  .badge-neutral { background: rgba(0,0,0,0.05); color: #64748B; }
-  .badge-up-light { background: rgba(255,255,255,0.25); color: white; }
-  .kpi-icon { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
-  .kpi-icon-white { background: rgba(255,255,255,0.2); }
-  .kpi-icon-blue  { background: rgba(14,165,233,0.1); }
-  .kpi-icon-green { background: rgba(20,184,166,0.1); }
-  .kpi-icon-orange{ background: rgba(245,158,11,0.1); }
+  /* ── KPI cards ── */
+  .kpi-row { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+  .kpi-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    position: relative; overflow: hidden;
+    box-shadow: var(--shadow-card);
+    transition: box-shadow .2s;
+  }
+  .kpi-card:hover { box-shadow: var(--shadow-card), var(--shadow-glow-green); }
+  .kpi-card-primary {
+    background: linear-gradient(135deg, #1b1938 0%, #2a1f54 100%);
+    border-color: rgba(203,183,251,.2);
+  }
+  .kpi-card-primary::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--lavender), var(--green));
+  }
+  .kpi-label { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .kpi-label-primary { color: rgba(203,183,251,.7); }
+  .kpi-value { font-size: 1.9rem; font-weight: 800; color: var(--cream); line-height: 1; letter-spacing: -0.03em; }
+  .kpi-value-primary { color: var(--lavender); }
+  .kpi-sub { font-size: 0.73rem; color: var(--text-muted); margin-top: 4px; }
+  .kpi-sub-primary { color: rgba(203,183,251,.5); }
+  .kpi-badge {
+    display: inline-flex; align-items: center; gap: 3px;
+    padding: 3px 10px; border-radius: 9999px;
+    font-size: 0.72rem; font-weight: 700; margin-top: 8px;
+    letter-spacing: 0.02em;
+  }
+  .badge-up      { background: var(--green-dim); color: var(--green); }
+  .badge-down    { background: var(--red-dim);   color: var(--red); }
+  .badge-neutral { background: rgba(255,255,255,.06); color: var(--text-secondary); }
+  .badge-up-light { background: rgba(30,215,96,.2); color: var(--green); }
+  .kpi-icon {
+    position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+  }
+  .kpi-icon-white  { background: rgba(255,255,255,.08); }
+  .kpi-icon-blue   { background: rgba(203,183,251,.1); }
+  .kpi-icon-green  { background: var(--green-dim); }
+  .kpi-icon-orange { background: rgba(245,166,35,.1); }
 
-  /* ── 섹션 카드 (분석 결과) ── */
-  .section-card { background: rgba(255,255,255,0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.6); border-radius: 20px; padding: 22px 24px; box-shadow: 0 2px 16px rgba(0,0,0,0.04); margin-bottom: 14px; }
-  .section-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
-  .section-title { font-size: 1rem; font-weight: 700; color: #1E293B; }
-  .section-sub   { font-size: 0.76rem; color: #94A3B8; margin-top: 2px; }
-  .section-badge { background: rgba(0,0,0,0.04); color: #64748B; border-radius: 20px; padding: 5px 14px; font-size: 0.76rem; font-weight: 500; }
+  /* ── Section card ── */
+  .section-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: var(--radius-md);
+    padding: 20px 22px;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 12px;
+  }
+  .section-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+  .section-title { font-size: 0.95rem; font-weight: 700; color: var(--cream); letter-spacing: -0.01em; }
+  .section-sub   { font-size: 0.73rem; color: var(--text-muted); margin-top: 2px; }
+  .section-badge {
+    background: rgba(255,255,255,.06); color: var(--text-secondary);
+    border-radius: 9999px; padding: 4px 12px;
+    font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
 
-  /* ── AI 코멘트 ── */
-  .ai-box { background: rgba(14,165,233,0.06); border: 1px solid rgba(14,165,233,0.15); border-radius: 14px; padding: 18px 20px; font-size: 0.85rem; line-height: 1.75; color: #334155; }
-  .ai-box strong { color: #0D9488; }
-  .risk-tag { display: inline-block; background: #FEF2F2; border: 1px solid #FECACA; color: #DC2626; border-radius: 20px; padding: 3px 12px; font-size: 0.76rem; font-weight: 500; margin: 3px 3px 3px 0; }
+  /* ── AI commentary box ── */
+  .ai-box {
+    background: var(--lavender-dim);
+    border: 1px solid rgba(203,183,251,.2);
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+    font-size: 0.84rem; line-height: 1.8; color: var(--text-primary);
+  }
+  .ai-box strong { color: var(--lavender); }
+  .risk-tag {
+    display: inline-block;
+    background: var(--red-dim); border: 1px solid rgba(255,77,77,.25);
+    color: var(--red); border-radius: 9999px;
+    padding: 3px 12px; font-size: 0.73rem; font-weight: 600;
+    margin: 3px 3px 3px 0;
+  }
 
-  /* ── 리스크 카드 ── */
-  .risk-card { background: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.6); border-radius: 14px; padding: 16px 20px; text-align: center; }
-  .risk-label  { font-size: 0.76rem; font-weight: 500; color: #64748B; margin-bottom: 4px; }
-  .risk-value  { font-size: 1.4rem; font-weight: 800; color: #0D9488; }
-  .risk-delta  { font-size: 0.78rem; font-weight: 600; margin-top: 4px; }
+  /* ── Risk card ── */
+  .risk-card {
+    background: var(--bg-panel);
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px; text-align: center;
+  }
+  .risk-label { font-size: 0.73rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .risk-value { font-size: 1.35rem; font-weight: 800; color: var(--green); }
+  .risk-delta { font-size: 0.76rem; font-weight: 600; margin-top: 4px; }
 
   /* ── Streamlit overrides ── */
   div[data-testid="metric-container"] { background: transparent !important; border: none !important; padding: 0 !important; }
+  div[data-testid="metric-container"] label  { color: var(--text-muted) !important; font-size: 0.73rem !important; font-weight: 600 !important; text-transform: uppercase; letter-spacing: 0.05em; }
+  div[data-testid="metric-container"] [data-testid="metric-value"] { color: var(--cream) !important; font-size: 1.6rem !important; font-weight: 800 !important; }
+
+  /* buttons — Spotify green primary */
   .stButton > button {
-    background: linear-gradient(135deg, #14B8A6, #0D9488) !important;
-    color: white !important; border: none !important;
-    border-radius: 12px !important; font-weight: 600 !important;
-    padding: 10px 22px !important; font-size: 0.86rem !important;
-    box-shadow: 0 3px 12px rgba(20,184,166,0.35) !important;
+    background: var(--green) !important;
+    color: #0f0e17 !important; border: none !important;
+    border-radius: 9999px !important; font-weight: 700 !important;
+    padding: 10px 24px !important; font-size: 0.85rem !important;
+    letter-spacing: 0.02em !important;
+    box-shadow: 0 4px 14px rgba(30,215,96,.35) !important;
+    transition: all .15s !important;
   }
-  .stButton > button:hover { box-shadow: 0 6px 20px rgba(20,184,166,0.5) !important; transform: translateY(-1px) !important; }
+  .stButton > button:hover {
+    background: #23f277 !important;
+    box-shadow: 0 6px 22px rgba(30,215,96,.5) !important;
+    transform: scale(1.02) translateY(-1px) !important;
+  }
+
+  /* text inputs */
   .stTextInput > div > div > input {
-    border-radius: 12px !important; border: 1.5px solid rgba(255,255,255,0.7) !important;
-    background: rgba(255,255,255,0.6) !important; color: #1E293B !important;
-    backdrop-filter: blur(8px) !important; font-size: 0.9rem !important; padding: 10px 14px !important;
+    background: var(--bg-panel) !important;
+    border: 1.5px solid rgba(255,255,255,.12) !important;
+    border-radius: var(--radius-sm) !important;
+    color: var(--cream) !important;
+    font-size: 0.9rem !important; padding: 10px 14px !important;
   }
-  .stTextInput > div > div > input:focus { border-color: #14B8A6 !important; box-shadow: 0 0 0 3px rgba(20,184,166,0.15) !important; }
-  div[data-testid="stExpander"] { background: rgba(255,255,255,0.5); border-radius: 14px; border: 1px solid rgba(255,255,255,0.5) !important; }
-  div[data-testid="stExpander"] summary { color: #334155 !important; font-weight: 600 !important; }
-  .stDataFrame { border-radius: 14px !important; overflow: hidden !important; }
-  .stAlert { border-radius: 14px !important; }
-  div[data-testid="stSidebar"] { background: rgba(255,255,255,0.7) !important; backdrop-filter: blur(12px) !important; }
+  .stTextInput > div > div > input::placeholder { color: var(--text-muted) !important; }
+  .stTextInput > div > div > input:focus {
+    border-color: var(--lavender) !important;
+    box-shadow: 0 0 0 3px var(--lavender-dim) !important;
+  }
+  .stTextInput label { color: var(--text-secondary) !important; font-size: 0.8rem !important; font-weight: 600 !important; }
+
+  /* selectbox */
+  div[data-testid="stSelectbox"] > div > div {
+    background: var(--bg-panel) !important;
+    border: 1.5px solid rgba(255,255,255,.12) !important;
+    border-radius: var(--radius-sm) !important;
+    color: var(--cream) !important;
+  }
+
+  /* radio (page selector) */
+  div[data-testid="stRadio"] > div { gap: 6px !important; flex-wrap: wrap; }
+  div[data-testid="stRadio"] label {
+    background: var(--bg-card) !important;
+    border: 1px solid rgba(255,255,255,.08) !important;
+    border-radius: 9999px !important;
+    padding: 6px 18px !important;
+    color: var(--text-secondary) !important;
+    font-size: 0.83rem !important; font-weight: 500 !important;
+    cursor: pointer; transition: all .15s;
+  }
+  div[data-testid="stRadio"] label:has(input:checked) {
+    background: var(--lavender) !important;
+    border-color: var(--lavender) !important;
+    color: #0f0e17 !important;
+    font-weight: 700 !important;
+  }
+
+  /* expander */
+  div[data-testid="stExpander"] {
+    background: var(--bg-card) !important;
+    border: 1px solid rgba(255,255,255,.07) !important;
+    border-radius: var(--radius-sm) !important;
+  }
+  div[data-testid="stExpander"] summary { color: var(--text-secondary) !important; font-weight: 600 !important; }
+  div[data-testid="stExpander"] summary:hover { color: var(--cream) !important; }
+
+  /* spinner / alerts */
+  .stSpinner > div > div { border-top-color: var(--green) !important; }
+  .stAlert { border-radius: var(--radius-sm) !important; }
+  .stAlert[data-baseweb="notification"] { background: var(--bg-panel) !important; border-color: rgba(255,255,255,.1) !important; }
+
+  /* dataframe */
+  .stDataFrame { border-radius: var(--radius-sm) !important; overflow: hidden !important; }
+  .stDataFrame thead th { background: var(--bg-panel) !important; color: var(--text-muted) !important; font-size: 0.73rem !important; text-transform: uppercase; letter-spacing: 0.05em; }
+  .stDataFrame tbody tr:hover td { background: var(--bg-hover) !important; }
+
+  /* sidebar */
+  div[data-testid="stSidebar"] {
+    background: var(--bg-hero) !important;
+    border-right: 1px solid rgba(255,255,255,.07) !important;
+  }
+
+  /* tabs */
+  div[data-testid="stTabs"] button {
+    color: var(--text-secondary) !important; border-radius: 9999px !important; font-weight: 500 !important;
+  }
+  div[data-testid="stTabs"] button[aria-selected="true"] {
+    color: var(--cream) !important; border-bottom-color: var(--green) !important; font-weight: 700 !important;
+  }
+
+  /* slider */
+  div[data-testid="stSlider"] div[role="slider"] { background: var(--green) !important; }
+  div[data-testid="stSlider"] div[data-testid="stTickBar"] { background: rgba(255,255,255,.1) !important; }
+
+  /* progress bar */
+  div[data-testid="stProgress"] > div > div { background: var(--green) !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -218,9 +425,9 @@ st.markdown("""
     <div class="nav-link">Tools</div>
   </div>
   <div class="nav-right">
-    <div style="font-size:0.72rem; color:#94A3B8; text-align:right">
-      <b style="color:#0D9488">매수:</b> 관망→선발대→본부대→몰빵<br>
-      <b style="color:#EF4444">매도:</b> 관망→일부분→강력→무조건
+    <div style="font-size:0.71rem; color:rgba(233,229,221,.45); text-align:right">
+      <b style="color:#1ed760">매수:</b> 관망→선발대→본부대→몰빵<br>
+      <b style="color:#ff4d4d">매도:</b> 관망→일부분→강력→무조건
     </div>
     <div class="nav-avatar">AI</div>
   </div>
@@ -248,9 +455,9 @@ if page_mode == "🗺️ 시장 히트맵 & 추천":
     st.markdown("""<div class="section-card" style="padding:14px 20px">
   <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px">
     <div class="section-title" style="margin:0; font-size:1.15rem">🗺️ Market Heatmap & AI Recommendations</div>
-    <div style="font-size:0.76rem; color:#6B7280">
-      <b style="color:#16A34A">매수:</b> ⚪관망→🟡선발대→🟠본부대→🔴몰빵 &nbsp;|&nbsp;
-      <b style="color:#DC2626">매도:</b> ⚪관망→🟡일부분→🟠강력→🔴무조건
+    <div style="font-size:0.74rem; color:rgba(233,229,221,.45)">
+      <b style="color:#1ed760">매수:</b> ⚪관망→🟡선발대→🟠본부대→🔴몰빵 &nbsp;|&nbsp;
+      <b style="color:#ff4d4d">매도:</b> ⚪관망→🟡일부분→🟠강력→🔴무조건
     </div>
   </div>
 </div>""", unsafe_allow_html=True)
@@ -278,41 +485,41 @@ if page_mode == "🗺️ 시장 히트맵 & 추천":
 
             c_buy, c_sell = st.columns(2)
             with c_buy:
-                st.markdown("""<div class="section-card" style="border-left:4px solid #16A34A; padding:14px 18px">
-  <div class="section-title" style="color:#16A34A">🟢 매수 추천 (선발대~몰빵)</div>
+                st.markdown("""<div class="section-card" style="border-left:3px solid #1ed760; padding:14px 18px">
+  <div class="section-title" style="color:#1ed760">🟢 매수 추천 (선발대~몰빵)</div>
 </div>""", unsafe_allow_html=True)
                 if picks["buy"]:
                     for i, b in enumerate(picks["buy"], 1):
                         lbl = b.get("buy_label", "")
                         reasons = " · ".join(b.get("buy_reasons", [])[:2]) or "저점 매수 신호"
-                        lbl_co = "#DC2626" if "몰빵" in lbl else "#F97316" if "본부대" in lbl else "#EAB308"
-                        st.markdown(f"""<div style="background:white; border-radius:10px; padding:10px 14px; margin-bottom:5px; box-shadow:0 1px 2px rgba(0,0,0,0.04)">
+                        lbl_co = "#ff4d4d" if "몰빵" in lbl else "#f5a623" if "본부대" in lbl else "#cbb7fb"
+                        st.markdown(f"""<div style="background:#1e1d2b; border:1px solid rgba(255,255,255,.07); border-radius:8px; padding:10px 14px; margin-bottom:6px">
   <div style="display:flex; justify-content:space-between; align-items:center">
-    <b style="font-size:0.86rem">{i}. {b['name']} <span style="color:#9CA3AF; font-weight:400">{b['ticker']}</span></b>
-    <span style="color:{lbl_co}; font-weight:700; font-size:0.78rem">{lbl}</span>
+    <b style="font-size:0.85rem; color:#e9e5dd">{i}. {b['name']} <span style="color:rgba(233,229,221,.4); font-weight:400">{b['ticker']}</span></b>
+    <span style="color:{lbl_co}; font-weight:700; font-size:0.76rem">{lbl}</span>
   </div>
-  <div style="font-size:0.75rem; color:#6B7280; margin-top:3px">RSI {b['rsi']:.0f} · {b['ret_1m']:+.1f}%(1M) · {b['ret_5d']:+.1f}%(5D) · Vol {b['vol_ratio']:.1f}x</div>
-  <div style="font-size:0.73rem; color:#16A34A; margin-top:2px">💡 {reasons}</div>
+  <div style="font-size:0.73rem; color:rgba(233,229,221,.45); margin-top:3px">RSI {b['rsi']:.0f} · {b['ret_1m']:+.1f}%(1M) · {b['ret_5d']:+.1f}%(5D) · Vol {b['vol_ratio']:.1f}x</div>
+  <div style="font-size:0.72rem; color:#1ed760; margin-top:2px">💡 {reasons}</div>
 </div>""", unsafe_allow_html=True)
                 else:
                     st.info("매수 추천 종목 없음")
 
             with c_sell:
-                st.markdown("""<div class="section-card" style="border-left:4px solid #DC2626; padding:14px 18px">
-  <div class="section-title" style="color:#DC2626">🔴 매도 추천 (일부분~무조건)</div>
+                st.markdown("""<div class="section-card" style="border-left:3px solid #ff4d4d; padding:14px 18px">
+  <div class="section-title" style="color:#ff4d4d">🔴 매도 추천 (일부분~무조건)</div>
 </div>""", unsafe_allow_html=True)
                 if picks["sell"]:
                     for i, s in enumerate(picks["sell"], 1):
                         lbl = s.get("sell_label", "")
                         reasons = " · ".join(s.get("sell_reasons", [])[:2]) or "매도 주의"
-                        lbl_co = "#DC2626" if "무조건" in lbl else "#F97316" if "강력" in lbl else "#EAB308"
-                        st.markdown(f"""<div style="background:white; border-radius:10px; padding:10px 14px; margin-bottom:5px; box-shadow:0 1px 2px rgba(0,0,0,0.04)">
+                        lbl_co = "#ff4d4d" if "무조건" in lbl else "#f5a623" if "강력" in lbl else "#cbb7fb"
+                        st.markdown(f"""<div style="background:#1e1d2b; border:1px solid rgba(255,255,255,.07); border-radius:8px; padding:10px 14px; margin-bottom:6px">
   <div style="display:flex; justify-content:space-between; align-items:center">
-    <b style="font-size:0.86rem">{i}. {s['name']} <span style="color:#9CA3AF; font-weight:400">{s['ticker']}</span></b>
-    <span style="color:{lbl_co}; font-weight:700; font-size:0.78rem">{lbl}</span>
+    <b style="font-size:0.85rem; color:#e9e5dd">{i}. {s['name']} <span style="color:rgba(233,229,221,.4); font-weight:400">{s['ticker']}</span></b>
+    <span style="color:{lbl_co}; font-weight:700; font-size:0.76rem">{lbl}</span>
   </div>
-  <div style="font-size:0.75rem; color:#6B7280; margin-top:3px">RSI {s['rsi']:.0f} · {s['ret_1m']:+.1f}%(1M) · {s['ret_5d']:+.1f}%(5D) · Vol {s['vol_ratio']:.1f}x</div>
-  <div style="font-size:0.73rem; color:#DC2626; margin-top:2px">⚠ {reasons}</div>
+  <div style="font-size:0.73rem; color:rgba(233,229,221,.45); margin-top:3px">RSI {s['rsi']:.0f} · {s['ret_1m']:+.1f}%(1M) · {s['ret_5d']:+.1f}%(5D) · Vol {s['vol_ratio']:.1f}x</div>
+  <div style="font-size:0.72rem; color:#ff4d4d; margin-top:2px">⚠ {reasons}</div>
 </div>""", unsafe_allow_html=True)
                 else:
                     st.info("매도 추천 종목 없음")
@@ -330,7 +537,7 @@ if page_mode == "🗺️ 시장 히트맵 & 추천":
 elif page_mode == "📋 데일리 브리핑":
     st.markdown("""<div class="section-card" style="padding:14px 20px">
   <div class="section-title" style="margin:0; font-size:1.15rem">📋 데일리 마켓 브리핑 — 미국/한국 지수 분석</div>
-  <div class="section-sub" style="margin-top:4px">Gemini AI가 분석하는 오늘의 시장 동향, 상승/하락 이유, 내일 전망</div>
+  <div class="section-sub" style="margin-top:4px">Claude AI가 분석하는 오늘의 시장 동향, 상승/하락 이유, 내일 전망</div>
 </div>""", unsafe_allow_html=True)
 
     with st.spinner("📡 지수 데이터 수집 + AI 분석 중... (15~30초)"):
@@ -343,12 +550,12 @@ elif page_mode == "📋 데일리 브리핑":
         cols = st.columns(min(len(idx_items), 5))
         for col, (name, d) in zip(cols, idx_items[:5]):
             chg = d.get("chg_pct", 0)
-            c = "#16A34A" if chg > 0 else "#EF4444" if chg < 0 else "#64748B"
+            c = "#1ed760" if chg > 0 else "#ff4d4d" if chg < 0 else "rgba(233,229,221,.45)"
             arrow = "▲" if chg > 0 else "▼" if chg < 0 else "─"
             col.markdown(f"""<div class="glass" style="padding:12px 14px; text-align:center">
-  <div style="font-size:0.7rem; color:#94A3B8">{name}</div>
-  <div style="font-size:1.1rem; font-weight:800; color:#1E293B">{d.get('price', 0):,.2f}</div>
-  <div style="font-size:0.78rem; font-weight:700; color:{c}">{arrow} {chg:+.2f}%</div>
+  <div style="font-size:0.68rem; color:rgba(233,229,221,.45); text-transform:uppercase; letter-spacing:.05em">{name}</div>
+  <div style="font-size:1.1rem; font-weight:800; color:#e9e5dd; letter-spacing:-.02em">{d.get('price', 0):,.2f}</div>
+  <div style="font-size:0.76rem; font-weight:700; color:{c}">{arrow} {chg:+.2f}%</div>
 </div>""", unsafe_allow_html=True)
 
         # 나머지 지수
@@ -356,54 +563,54 @@ elif page_mode == "📋 데일리 브리핑":
             cols2 = st.columns(min(len(idx_items) - 5, 5))
             for col, (name, d) in zip(cols2, idx_items[5:]):
                 chg = d.get("chg_pct", 0)
-                c = "#16A34A" if chg > 0 else "#EF4444" if chg < 0 else "#64748B"
+                c = "#1ed760" if chg > 0 else "#ff4d4d" if chg < 0 else "rgba(233,229,221,.45)"
                 arrow = "▲" if chg > 0 else "▼" if chg < 0 else "─"
                 col.markdown(f"""<div class="glass" style="padding:12px 14px; text-align:center">
-  <div style="font-size:0.7rem; color:#94A3B8">{name}</div>
-  <div style="font-size:1.1rem; font-weight:800; color:#1E293B">{d.get('price', 0):,.2f}</div>
-  <div style="font-size:0.78rem; font-weight:700; color:{c}">{arrow} {chg:+.2f}%</div>
+  <div style="font-size:0.68rem; color:rgba(233,229,221,.45); text-transform:uppercase; letter-spacing:.05em">{name}</div>
+  <div style="font-size:1.1rem; font-weight:800; color:#e9e5dd; letter-spacing:-.02em">{d.get('price', 0):,.2f}</div>
+  <div style="font-size:0.76rem; font-weight:700; color:{c}">{arrow} {chg:+.2f}%</div>
 </div>""", unsafe_allow_html=True)
 
     # 미국 시장 분석
-    st.markdown(f"""<div class="glass" style="padding:18px 22px; border-left:4px solid #3B82F6">
-  <div style="font-size:0.95rem; font-weight:800; color:#1E293B; margin-bottom:8px">🇺🇸 미국 시장 분석</div>
-  <div style="font-size:0.88rem; color:#334155; line-height:1.8">{briefing.get('us_analysis', '분석 데이터 없음')}</div>
+    st.markdown(f"""<div class="glass" style="padding:18px 22px; border-left:3px solid #cbb7fb">
+  <div style="font-size:0.93rem; font-weight:800; color:#e9e5dd; margin-bottom:8px; letter-spacing:-.01em">🇺🇸 미국 시장 분석</div>
+  <div style="font-size:0.86rem; color:rgba(233,229,221,.8); line-height:1.8">{briefing.get('us_analysis', '분석 데이터 없음')}</div>
 </div>""", unsafe_allow_html=True)
 
     # 한국 시장 분석
-    st.markdown(f"""<div class="glass" style="padding:18px 22px; border-left:4px solid #EF4444">
-  <div style="font-size:0.95rem; font-weight:800; color:#1E293B; margin-bottom:8px">🇰🇷 한국 시장 분석</div>
-  <div style="font-size:0.88rem; color:#334155; line-height:1.8">{briefing.get('kr_analysis', '분석 데이터 없음')}</div>
+    st.markdown(f"""<div class="glass" style="padding:18px 22px; border-left:3px solid #ff4d4d">
+  <div style="font-size:0.93rem; font-weight:800; color:#e9e5dd; margin-bottom:8px; letter-spacing:-.01em">🇰🇷 한국 시장 분석</div>
+  <div style="font-size:0.86rem; color:rgba(233,229,221,.8); line-height:1.8">{briefing.get('kr_analysis', '분석 데이터 없음')}</div>
 </div>""", unsafe_allow_html=True)
 
     # 주요 이벤트
     events = briefing.get("key_events", [])
     if events:
-        ev_html = '<div class="glass" style="padding:18px 22px"><div style="font-size:0.95rem; font-weight:800; color:#1E293B; margin-bottom:10px">🔑 주요 이벤트</div>'
+        ev_html = '<div class="glass" style="padding:18px 22px"><div style="font-size:0.95rem; font-weight:800; color:#e9e5dd; margin-bottom:10px">🔑 주요 이벤트</div>'
         for i, ev in enumerate(events, 1):
-            ev_html += f'<div style="font-size:0.85rem; color:#334155; padding:6px 0; border-bottom:1px solid rgba(0,0,0,0.04)">  {i}. {ev}</div>'
+            ev_html += f'<div style="font-size:0.85rem; color:rgba(233,229,221,.8); padding:6px 0; border-bottom:1px solid rgba(255,255,255,.06)">  {i}. {ev}</div>'
         ev_html += '</div>'
         st.markdown(ev_html, unsafe_allow_html=True)
 
     # 내일 전망
-    st.markdown(f"""<div class="glass" style="padding:18px 22px; border-left:4px solid #14B8A6">
-  <div style="font-size:0.95rem; font-weight:800; color:#1E293B; margin-bottom:8px">🔮 내일 전망</div>
-  <div style="font-size:0.88rem; color:#334155; line-height:1.8">{briefing.get('tomorrow_outlook', '전망 데이터 없음')}</div>
+    st.markdown(f"""<div class="glass" style="padding:18px 22px; border-left:3px solid #1ed760">
+  <div style="font-size:0.95rem; font-weight:800; color:#e9e5dd; margin-bottom:8px">🔮 내일 전망</div>
+  <div style="font-size:0.88rem; color:rgba(233,229,221,.8); line-height:1.8">{briefing.get('tomorrow_outlook', '전망 데이터 없음')}</div>
 </div>""", unsafe_allow_html=True)
 
     # 한국어 번역 뉴스
     news_list = briefing.get("news", [])
     if news_list and any(n.get("title_kr") for n in news_list):
-        news_html = '<div class="glass" style="padding:18px 22px"><div style="font-size:0.95rem; font-weight:800; color:#1E293B; margin-bottom:10px">📰 주요 뉴스 (한국어 번역)</div>'
+        news_html = '<div class="glass" style="padding:18px 22px"><div style="font-size:0.95rem; font-weight:800; color:#e9e5dd; margin-bottom:10px">📰 주요 뉴스 (한국어 번역)</div>'
         for n in news_list:
             title_kr = n.get("title_kr") or n.get("title", "")
             src = n.get("source", "")
-            news_html += f'<div style="font-size:0.83rem; color:#334155; padding:6px 0; border-bottom:1px solid rgba(0,0,0,0.04)"><span style="background:rgba(59,130,246,0.1); color:#3B82F6; padding:1px 7px; border-radius:6px; font-size:0.72rem; font-weight:600; margin-right:6px">{src}</span>{title_kr}</div>'
+            news_html += f'<div style="font-size:0.83rem; color:rgba(233,229,221,.8); padding:6px 0; border-bottom:1px solid rgba(255,255,255,.06)"><span style="background:rgba(203,183,251,.1); color:#cbb7fb; padding:1px 7px; border-radius:6px; font-size:0.72rem; font-weight:600; margin-right:6px">{src}</span>{title_kr}</div>'
         news_html += '</div>'
         st.markdown(news_html, unsafe_allow_html=True)
 
     api_badge = "🤖 Claude AI 분석" if briefing.get("api_used") else "📊 규칙 기반 분석 (API 미사용)"
-    st.markdown(f'<div style="text-align:right; font-size:0.72rem; color:#94A3B8; margin-top:4px">{api_badge} · {briefing.get("timestamp", "")[:19]}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div style="text-align:right; font-size:0.72rem; color:rgba(233,229,221,.35); margin-top:4px">{api_badge} · {briefing.get("timestamp", "")[:19]}</div>', unsafe_allow_html=True)
 
     # ── 섹터 로테이션 (브리핑 페이지 하단에 배치) ──
     st.markdown("---")
@@ -421,16 +628,16 @@ elif page_mode == "📋 데일리 브리핑":
     phase_desc = rot_data.get("phase_description", "")
     rot_signal = rot_data.get("rotation_signal", "")
 
-    phase_colors = {"Early Bull": "#16A34A", "Late Bull": "#F59E0B", "Early Bear": "#EF4444", "Late Bear": "#DC2626", "Transition": "#6B7280"}
-    p_color = phase_colors.get(phase, "#6B7280")
+    phase_colors = {"Early Bull": "#1ed760", "Late Bull": "#f5a623", "Early Bear": "#ff4d4d", "Late Bear": "#ff4d4d", "Transition": "rgba(233,229,221,.45)"}
+    p_color = phase_colors.get(phase, "rgba(233,229,221,.45)")
 
     st.markdown(f"""<div class="glass" style="padding:16px 20px">
   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px">
     <div>
       <span style="font-size:1.1rem; font-weight:800; color:{p_color}">📍 {phase}</span>
-      <div style="font-size:0.82rem; color:#64748B; margin-top:4px">{phase_desc}</div>
+      <div style="font-size:0.82rem; color:rgba(233,229,221,.45); margin-top:4px">{phase_desc}</div>
     </div>
-    <div style="background:rgba(20,184,166,0.1); color:#0D9488; padding:6px 14px; border-radius:12px; font-size:0.8rem; font-weight:600; max-width:300px; text-align:right">
+    <div style="background:rgba(203,183,251,.1); color:#cbb7fb; padding:6px 14px; border-radius:12px; font-size:0.8rem; font-weight:600; max-width:300px; text-align:right">
       💡 {rot_signal}
     </div>
   </div>
@@ -444,15 +651,15 @@ elif page_mode == "📋 데일리 브리핑":
     if buy_secs or sell_secs:
         rc1, rc2 = st.columns(2)
         with rc1:
-            st.markdown('<div class="glass" style="border-left:4px solid #16A34A; padding:14px 18px"><b style="color:#16A34A">🟢 매수 추천 섹터</b></div>', unsafe_allow_html=True)
+            st.markdown('<div class="glass" style="border-left:3px solid #1ed760; padding:14px 18px"><b style="color:#1ed760">🟢 매수 추천 섹터</b></div>', unsafe_allow_html=True)
             for s in buy_secs:
-                st.markdown(f'<div style="background:white; border-radius:8px; padding:8px 12px; margin-bottom:4px; font-size:0.85rem"><b>{s["ticker"]}</b> ({s["name"]}) — 모멘텀 {s.get("momentum_score",0):+.2f} · 1M {s.get("return_1m",0):+.1f}%</div>', unsafe_allow_html=True)
+                st.markdown(f'<div style="background:#1e1d2b; border-radius:8px; padding:8px 12px; margin-bottom:4px; font-size:0.85rem"><b>{s["ticker"]}</b> ({s["name"]}) — 모멘텀 {s.get("momentum_score",0):+.2f} · 1M {s.get("return_1m",0):+.1f}%</div>', unsafe_allow_html=True)
             if not buy_secs:
                 st.info("현재 매수 추천 섹터 없음")
         with rc2:
-            st.markdown('<div class="glass" style="border-left:4px solid #EF4444; padding:14px 18px"><b style="color:#EF4444">🔴 매도/축소 섹터</b></div>', unsafe_allow_html=True)
+            st.markdown('<div class="glass" style="border-left:3px solid #ff4d4d; padding:14px 18px"><b style="color:#ff4d4d">🔴 매도/축소 섹터</b></div>', unsafe_allow_html=True)
             for s in sell_secs:
-                st.markdown(f'<div style="background:white; border-radius:8px; padding:8px 12px; margin-bottom:4px; font-size:0.85rem"><b>{s["ticker"]}</b> ({s["name"]}) — 모멘텀 {s.get("momentum_score",0):+.2f} · 1M {s.get("return_1m",0):+.1f}%</div>', unsafe_allow_html=True)
+                st.markdown(f'<div style="background:#1e1d2b; border-radius:8px; padding:8px 12px; margin-bottom:4px; font-size:0.85rem"><b>{s["ticker"]}</b> ({s["name"]}) — 모멘텀 {s.get("momentum_score",0):+.2f} · 1M {s.get("return_1m",0):+.1f}%</div>', unsafe_allow_html=True)
             if not sell_secs:
                 st.info("현재 매도 추천 섹터 없음")
 
@@ -482,8 +689,8 @@ elif page_mode == "🛠️ 투자 도구":
     # ─────────────────────────────────────────────────────────────────
     if tool_tab == "📊 백테스팅":
         st.markdown("""<div class="glass" style="padding:14px 18px">
-  <div style="font-size:0.95rem; font-weight:700; color:#1E293B">📊 Golden Bottom Score 백테스팅</div>
-  <div style="font-size:0.8rem; color:#64748B; margin-top:4px">RSI 과매도 + 볼린저밴드 하단 돌파 시 매수 → RSI 과매수 또는 목표수익 도달 시 매도</div>
+  <div style="font-size:0.95rem; font-weight:700; color:#e9e5dd">📊 Golden Bottom Score 백테스팅</div>
+  <div style="font-size:0.8rem; color:rgba(233,229,221,.45); margin-top:4px">RSI 과매도 + 볼린저밴드 하단 돌파 시 매수 → RSI 과매수 또는 목표수익 도달 시 매도</div>
 </div>""", unsafe_allow_html=True)
 
         bt_c1, bt_c2, bt_c3 = st.columns([2, 1, 1])
@@ -505,28 +712,28 @@ elif page_mode == "🛠️ 투자 도구":
                 st.warning(f"⚠️ {bt_ticker}에 대한 매수 신호가 발생하지 않았습니다.")
             else:
                 # 요약 KPI
-                win_c = "#16A34A" if summary.get("win_rate", 0) >= 50 else "#EF4444"
-                ret_c = "#16A34A" if summary.get("total_return_pct", 0) >= 0 else "#EF4444"
+                win_c = "#1ed760" if summary.get("win_rate", 0) >= 50 else "#ff4d4d"
+                ret_c = "#1ed760" if summary.get("total_return_pct", 0) >= 0 else "#ff4d4d"
                 st.markdown(f"""<div style="display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin:12px 0">
   <div class="glass" style="padding:12px; text-align:center">
-    <div style="font-size:0.72rem; color:#94A3B8">총 거래수</div>
-    <div style="font-size:1.4rem; font-weight:800; color:#1E293B">{summary.get('total_trades',0)}</div>
+    <div style="font-size:0.72rem; color:rgba(233,229,221,.35)">총 거래수</div>
+    <div style="font-size:1.4rem; font-weight:800; color:#e9e5dd">{summary.get('total_trades',0)}</div>
   </div>
   <div class="glass" style="padding:12px; text-align:center">
-    <div style="font-size:0.72rem; color:#94A3B8">승률</div>
+    <div style="font-size:0.72rem; color:rgba(233,229,221,.35)">승률</div>
     <div style="font-size:1.4rem; font-weight:800; color:{win_c}">{summary.get('win_rate',0):.1f}%</div>
   </div>
   <div class="glass" style="padding:12px; text-align:center">
-    <div style="font-size:0.72rem; color:#94A3B8">총 수익률</div>
+    <div style="font-size:0.72rem; color:rgba(233,229,221,.35)">총 수익률</div>
     <div style="font-size:1.4rem; font-weight:800; color:{ret_c}">{summary.get('total_return_pct',0):+.2f}%</div>
   </div>
   <div class="glass" style="padding:12px; text-align:center">
-    <div style="font-size:0.72rem; color:#94A3B8">최대 낙폭</div>
-    <div style="font-size:1.4rem; font-weight:800; color:#EF4444">-{summary.get('max_drawdown_pct',0):.2f}%</div>
+    <div style="font-size:0.72rem; color:rgba(233,229,221,.35)">최대 낙폭</div>
+    <div style="font-size:1.4rem; font-weight:800; color:#ff4d4d">-{summary.get('max_drawdown_pct',0):.2f}%</div>
   </div>
   <div class="glass" style="padding:12px; text-align:center">
-    <div style="font-size:0.72rem; color:#94A3B8">샤프 비율</div>
-    <div style="font-size:1.4rem; font-weight:800; color:#3B82F6">{summary.get('sharpe_ratio',0):.2f}</div>
+    <div style="font-size:0.72rem; color:rgba(233,229,221,.35)">샤프 비율</div>
+    <div style="font-size:1.4rem; font-weight:800; color:#cbb7fb">{summary.get('sharpe_ratio',0):.2f}</div>
   </div>
 </div>""", unsafe_allow_html=True)
 
@@ -546,8 +753,8 @@ elif page_mode == "🛠️ 투자 도구":
     # ─────────────────────────────────────────────────────────────────
     elif tool_tab == "📅 실적 캘린더":
         st.markdown("""<div class="glass" style="padding:14px 18px">
-  <div style="font-size:0.95rem; font-weight:700; color:#1E293B">📅 실적 캘린더 & 어닝 서프라이즈</div>
-  <div style="font-size:0.8rem; color:#64748B; margin-top:4px">주요 종목의 실적 발표 일정 + 과거 어닝 서프라이즈 분석</div>
+  <div style="font-size:0.95rem; font-weight:700; color:#e9e5dd">📅 실적 캘린더 & 어닝 서프라이즈</div>
+  <div style="font-size:0.8rem; color:rgba(233,229,221,.45); margin-top:4px">주요 종목의 실적 발표 일정 + 과거 어닝 서프라이즈 분석</div>
 </div>""", unsafe_allow_html=True)
 
         ec_days = st.slider("조회 기간 (일)", 7, 60, 14, key="ec_days")
@@ -558,27 +765,27 @@ elif page_mode == "🛠️ 투자 도구":
 
             found = upcoming.get("upcoming", [])
             st.markdown(f"""<div class="glass" style="padding:12px 18px">
-  <div style="font-size:0.85rem; color:#64748B">
+  <div style="font-size:0.85rem; color:rgba(233,229,221,.45)">
     조회 기간: {upcoming.get('window_start','')} ~ {upcoming.get('window_end','')} ·
     확인 종목: {upcoming.get('checked_tickers',0)}개 ·
-    발표 예정: <b style="color:#1E293B">{upcoming.get('found_earnings',0)}개</b>
+    발표 예정: <b style="color:#e9e5dd">{upcoming.get('found_earnings',0)}개</b>
   </div>
 </div>""", unsafe_allow_html=True)
 
             if found:
                 for entry in found:
                     days_until = entry.get("days_until", 0)
-                    urgency_c = "#EF4444" if days_until <= 3 else "#F59E0B" if days_until <= 7 else "#64748B"
+                    urgency_c = "#ff4d4d" if days_until <= 3 else "#f5a623" if days_until <= 7 else "rgba(233,229,221,.45)"
                     flag = "🇰🇷" if entry.get("is_korean") else "🇺🇸"
                     st.markdown(f"""<div class="glass" style="padding:12px 16px; display:flex; justify-content:space-between; align-items:center">
   <div>
     <span style="font-size:1rem">{flag}</span>
     <b style="font-size:0.9rem; margin-left:6px">{entry.get('ticker','')}</b>
-    <span style="font-size:0.82rem; color:#64748B; margin-left:4px">({entry.get('company','')})</span>
+    <span style="font-size:0.82rem; color:rgba(233,229,221,.45); margin-left:4px">({entry.get('company','')})</span>
   </div>
   <div style="text-align:right">
     <div style="font-size:0.82rem; font-weight:700; color:{urgency_c}">D-{days_until}</div>
-    <div style="font-size:0.72rem; color:#94A3B8">{entry.get('earnings_date','')}</div>
+    <div style="font-size:0.72rem; color:rgba(233,229,221,.35)">{entry.get('earnings_date','')}</div>
   </div>
 </div>""", unsafe_allow_html=True)
 
@@ -590,19 +797,19 @@ elif page_mode == "🛠️ 투자 도구":
                         surprise = get_earnings_surprise(es_ticker)
 
                     st.markdown(f"""<div class="glass" style="padding:14px 18px">
-  <div style="font-size:0.92rem; font-weight:700; color:#1E293B">{surprise.get('ticker','')} ({surprise.get('company','')}) — 어닝 서프라이즈</div>
+  <div style="font-size:0.92rem; font-weight:700; color:#e9e5dd">{surprise.get('ticker','')} ({surprise.get('company','')}) — 어닝 서프라이즈</div>
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px">
-    <div style="text-align:center; padding:10px; background:#F8FAFF; border-radius:10px">
-      <div style="font-size:0.72rem; color:#94A3B8">분석 분기수</div>
-      <div style="font-size:1.3rem; font-weight:800; color:#1E293B">{surprise.get('total_quarters',0)}</div>
+    <div style="text-align:center; padding:10px; background:rgba(255,255,255,.04); border-radius:10px">
+      <div style="font-size:0.72rem; color:rgba(233,229,221,.35)">분석 분기수</div>
+      <div style="font-size:1.3rem; font-weight:800; color:#e9e5dd">{surprise.get('total_quarters',0)}</div>
     </div>
-    <div style="text-align:center; padding:10px; background:#F0FDF4; border-radius:10px">
-      <div style="font-size:0.72rem; color:#94A3B8">Beat Rate</div>
-      <div style="font-size:1.3rem; font-weight:800; color:#16A34A">{surprise.get('beat_rate','N/A')}{'%' if surprise.get('beat_rate') is not None else ''}</div>
+    <div style="text-align:center; padding:10px; background:rgba(30,215,96,.08); border-radius:10px">
+      <div style="font-size:0.72rem; color:rgba(233,229,221,.35)">Beat Rate</div>
+      <div style="font-size:1.3rem; font-weight:800; color:#1ed760">{surprise.get('beat_rate','N/A')}{'%' if surprise.get('beat_rate') is not None else ''}</div>
     </div>
-    <div style="text-align:center; padding:10px; background:#EFF6FF; border-radius:10px">
-      <div style="font-size:0.72rem; color:#94A3B8">평균 서프라이즈</div>
-      <div style="font-size:1.3rem; font-weight:800; color:#3B82F6">{f"{surprise.get('avg_surprise_pct'):+.2f}%" if surprise.get('avg_surprise_pct') is not None else 'N/A'}</div>
+    <div style="text-align:center; padding:10px; background:rgba(203,183,251,.06); border-radius:10px">
+      <div style="font-size:0.72rem; color:rgba(233,229,221,.35)">평균 서프라이즈</div>
+      <div style="font-size:1.3rem; font-weight:800; color:#cbb7fb">{f"{surprise.get('avg_surprise_pct'):+.2f}%" if surprise.get('avg_surprise_pct') is not None else 'N/A'}</div>
     </div>
   </div>
 </div>""", unsafe_allow_html=True)
@@ -620,8 +827,8 @@ elif page_mode == "🛠️ 투자 도구":
     # ─────────────────────────────────────────────────────────────────
     elif tool_tab == "🕵️ 내부자 거래":
         st.markdown("""<div class="glass" style="padding:14px 18px">
-  <div style="font-size:0.95rem; font-weight:700; color:#1E293B">🕵️ 내부자 거래 추적</div>
-  <div style="font-size:0.8rem; color:#64748B; margin-top:4px">최근 90일 내부자 매수/매도 활동 + 기관 보유 현황 → 투자 시그널</div>
+  <div style="font-size:0.95rem; font-weight:700; color:#e9e5dd">🕵️ 내부자 거래 추적</div>
+  <div style="font-size:0.8rem; color:rgba(233,229,221,.45); margin-top:4px">최근 90일 내부자 매수/매도 활동 + 기관 보유 현황 → 투자 시그널</div>
 </div>""", unsafe_allow_html=True)
 
         ins_ticker = st.text_input("종목 티커", value="AAPL", key="ins_ticker").strip().upper()
@@ -631,14 +838,14 @@ elif page_mode == "🛠️ 투자 도구":
                 ins_data = insider_signal(ins_ticker)
 
             signal = ins_data.get("signal", "Neutral")
-            sig_colors = {"Strong Buy": "#16A34A", "Buy": "#22C55E", "Neutral": "#6B7280", "Sell": "#F97316", "Weak Sell": "#EAB308", "Strong Sell": "#EF4444"}
-            sig_c = sig_colors.get(signal, "#6B7280")
+            sig_colors = {"Strong Buy": "#1ed760", "Buy": "#1ed760", "Neutral": "rgba(233,229,221,.45)", "Sell": "#f5a623", "Weak Sell": "#f5a623", "Strong Sell": "#ff4d4d"}
+            sig_c = sig_colors.get(signal, "rgba(233,229,221,.45)")
 
-            st.markdown(f"""<div class="glass" style="padding:16px 20px; border-left:4px solid {sig_c}">
+            st.markdown(f"""<div class="glass" style="padding:16px 20px; border-left:3px solid {sig_c}">
   <div style="display:flex; justify-content:space-between; align-items:center">
     <div>
-      <div style="font-size:1.1rem; font-weight:800; color:#1E293B">{ins_ticker} — 내부자 시그널</div>
-      <div style="font-size:0.82rem; color:#64748B; margin-top:4px">최근 90일: 매수 {ins_data.get('insider_buy_count',0)}건 · 매도 {ins_data.get('insider_sell_count',0)}건</div>
+      <div style="font-size:1.1rem; font-weight:800; color:#e9e5dd">{ins_ticker} — 내부자 시그널</div>
+      <div style="font-size:0.82rem; color:rgba(233,229,221,.45); margin-top:4px">최근 90일: 매수 {ins_data.get('insider_buy_count',0)}건 · 매도 {ins_data.get('insider_sell_count',0)}건</div>
     </div>
     <div style="background:{sig_c}; color:white; padding:8px 18px; border-radius:12px; font-weight:800; font-size:0.95rem">{signal}</div>
   </div>
@@ -648,7 +855,7 @@ elif page_mode == "🛠️ 투자 도구":
             reasons = ins_data.get("reasons", [])
             if reasons:
                 for r in reasons:
-                    st.markdown(f'<div style="font-size:0.85rem; color:#334155; padding:4px 0">• {r}</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div style="font-size:0.85rem; color:rgba(233,229,221,.8); padding:4px 0">• {r}</div>', unsafe_allow_html=True)
 
             # 최근 내부자 거래 테이블
             trades = ins_data.get("insider_trades", [])
@@ -671,8 +878,8 @@ elif page_mode == "🛠️ 투자 도구":
     # ─────────────────────────────────────────────────────────────────
     elif tool_tab == "📐 차트 패턴":
         st.markdown("""<div class="glass" style="padding:14px 18px">
-  <div style="font-size:0.95rem; font-weight:700; color:#1E293B">📐 차트 패턴 자동 인식</div>
-  <div style="font-size:0.8rem; color:#64748B; margin-top:4px">골든크로스 · 데스크로스 · 더블바텀/탑 · RSI 다이버전스 · 볼륨 클라이맥스 · 지지/저항선</div>
+  <div style="font-size:0.95rem; font-weight:700; color:#e9e5dd">📐 차트 패턴 자동 인식</div>
+  <div style="font-size:0.8rem; color:rgba(233,229,221,.45); margin-top:4px">골든크로스 · 데스크로스 · 더블바텀/탑 · RSI 다이버전스 · 볼륨 클라이맥스 · 지지/저항선</div>
 </div>""", unsafe_allow_html=True)
 
         cp_ticker = st.text_input("종목 티커", value="AAPL", key="cp_ticker").strip().upper()
@@ -699,25 +906,25 @@ elif page_mode == "🛠️ 투자 도구":
                     bearish = [p for p in patterns if p["type"] == "bearish"]
 
                     st.markdown(f"""<div class="glass" style="padding:14px 18px">
-  <div style="font-size:0.88rem; color:#64748B">
-    감지된 패턴: <b style="color:#1E293B">{len(patterns)}개</b>
-    (<span style="color:#16A34A">강세 {len(bullish)}</span> · <span style="color:#EF4444">약세 {len(bearish)}</span>)
+  <div style="font-size:0.88rem; color:rgba(233,229,221,.45)">
+    감지된 패턴: <b style="color:#e9e5dd">{len(patterns)}개</b>
+    (<span style="color:#1ed760">강세 {len(bullish)}</span> · <span style="color:#ff4d4d">약세 {len(bearish)}</span>)
   </div>
 </div>""", unsafe_allow_html=True)
 
                     for p in patterns:
-                        p_c = "#16A34A" if p["type"] == "bullish" else "#EF4444"
+                        p_c = "#1ed760" if p["type"] == "bullish" else "#ff4d4d"
                         p_icon = "📈" if p["type"] == "bullish" else "📉"
-                        conf_bg = "rgba(20,184,166,0.1)" if p["confidence"] >= 70 else "rgba(245,158,11,0.1)"
+                        conf_bg = "rgba(30,215,96,.12)" if p["confidence"] >= 70 else "rgba(245,166,35,.12)"
                         st.markdown(f"""<div class="glass" style="padding:12px 16px; border-left:3px solid {p_c}">
   <div style="display:flex; justify-content:space-between; align-items:center">
     <div>
       <span style="font-size:0.95rem; font-weight:700; color:{p_c}">{p_icon} {p['name']}</span>
-      <span style="font-size:0.72rem; color:#94A3B8; margin-left:8px">{p.get('date','')}</span>
+      <span style="font-size:0.72rem; color:rgba(233,229,221,.35); margin-left:8px">{p.get('date','')}</span>
     </div>
-    <div style="background:{conf_bg}; padding:3px 10px; border-radius:8px; font-size:0.76rem; font-weight:600; color:#1E293B">신뢰도 {p['confidence']}%</div>
+    <div style="background:{conf_bg}; padding:3px 10px; border-radius:8px; font-size:0.76rem; font-weight:600; color:#e9e5dd">신뢰도 {p['confidence']}%</div>
   </div>
-  <div style="font-size:0.82rem; color:#64748B; margin-top:4px">{p['description']}</div>
+  <div style="font-size:0.82rem; color:rgba(233,229,221,.45); margin-top:4px">{p['description']}</div>
 </div>""", unsafe_allow_html=True)
 
                     # 패턴 차트
@@ -759,8 +966,8 @@ else:  # 📈 종목 분석 (Dashboard)
     if not run_btn:
         # ── 헤더 ─────────────────────────────────────────────────────
         st.markdown("""<div style="margin-bottom:6px">
-  <div style="font-size:0.78rem; color:#94A3B8">Dashboard</div>
-  <div style="font-size:1.5rem; font-weight:800; color:#1E293B">💰 1억 만들기 — 오늘의 시장 & AI 추천</div>
+  <div style="font-size:0.78rem; color:rgba(233,229,221,.35)">Dashboard</div>
+  <div style="font-size:1.5rem; font-weight:800; color:#e9e5dd">💰 1억 만들기 — 오늘의 시장 & AI 추천</div>
 </div>""", unsafe_allow_html=True)
 
         # ── 새로고침 버튼 ──────────────────────────────────────────────
@@ -781,15 +988,15 @@ else:  # 📈 종목 분석 (Dashboard)
 
         # 시장 방향 + Fear & Greed
         fg = mkt["fear_score"]
-        fg_color = "#EF4444" if fg <= 30 else "#F59E0B" if fg <= 50 else "#14B8A6" if fg <= 70 else "#16A34A"
+        fg_color = "#ff4d4d" if fg <= 30 else "#f5a623" if fg <= 50 else "#1ed760" if fg <= 70 else "#1ed760"
         st.markdown(f"""<div class="glass" style="padding:18px 22px">
   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px">
     <div>
-      <div style="font-size:1.1rem; font-weight:800; color:#1E293B">{mkt['direction']}</div>
-      <div style="font-size:0.82rem; color:#64748B; margin-top:2px">{mkt['direction_detail']}</div>
+      <div style="font-size:1.1rem; font-weight:800; color:#e9e5dd">{mkt['direction']}</div>
+      <div style="font-size:0.82rem; color:rgba(233,229,221,.45); margin-top:2px">{mkt['direction_detail']}</div>
     </div>
     <div style="text-align:center">
-      <div style="font-size:0.72rem; color:#64748B">Fear & Greed</div>
+      <div style="font-size:0.72rem; color:rgba(233,229,221,.45)">Fear & Greed</div>
       <div style="font-size:1.8rem; font-weight:800; color:{fg_color}">{fg}</div>
       <div style="font-size:0.72rem; color:{fg_color}; font-weight:600">{mkt['fear_label']}</div>
     </div>
@@ -802,30 +1009,30 @@ else:  # 📈 종목 분석 (Dashboard)
             cols = st.columns(len(idx_items))
             for col, (name, d) in zip(cols, idx_items):
                 chg = d["chg_1d"]
-                c = "#16A34A" if chg > 0 else "#EF4444" if chg < 0 else "#64748B"
+                c = "#1ed760" if chg > 0 else "#ff4d4d" if chg < 0 else "rgba(233,229,221,.45)"
                 arrow = "▲" if chg > 0 else "▼" if chg < 0 else "─"
                 col.markdown(f"""<div class="glass" style="padding:12px 14px; text-align:center">
-  <div style="font-size:0.7rem; color:#94A3B8">{name}</div>
-  <div style="font-size:1.1rem; font-weight:800; color:#1E293B">{d['price']:,.1f}</div>
+  <div style="font-size:0.7rem; color:rgba(233,229,221,.35)">{name}</div>
+  <div style="font-size:1.1rem; font-weight:800; color:#e9e5dd">{d['price']:,.1f}</div>
   <div style="font-size:0.78rem; font-weight:700; color:{c}">{arrow} {chg:+.2f}%</div>
 </div>""", unsafe_allow_html=True)
 
         # 섹터 동향 바
         sectors = mkt.get("sectors", {})
         if sectors:
-            sec_html = '<div class="glass" style="padding:14px 18px"><div style="font-size:0.82rem; font-weight:700; color:#1E293B; margin-bottom:8px">섹터 동향 (금일)</div><div style="display:flex; flex-wrap:wrap; gap:6px">'
+            sec_html = '<div class="glass" style="padding:14px 18px"><div style="font-size:0.82rem; font-weight:700; color:#e9e5dd; margin-bottom:8px">섹터 동향 (금일)</div><div style="display:flex; flex-wrap:wrap; gap:6px">'
             for name, chg in sorted(sectors.items(), key=lambda x: x[1], reverse=True):
-                bg = "rgba(20,184,166,0.12)" if chg > 0 else "rgba(239,68,68,0.12)" if chg < 0 else "rgba(0,0,0,0.04)"
-                tc = "#0D9488" if chg > 0 else "#EF4444" if chg < 0 else "#64748B"
+                bg = "rgba(30,215,96,.12)" if chg > 0 else "rgba(255,77,77,.12)" if chg < 0 else "rgba(255,255,255,.05)"
+                tc = "#1ed760" if chg > 0 else "#ff4d4d" if chg < 0 else "rgba(233,229,221,.45)"
                 sec_html += f'<div style="background:{bg}; color:{tc}; padding:4px 10px; border-radius:10px; font-size:0.74rem; font-weight:600">{name} {chg:+.1f}%</div>'
             sec_html += '</div></div>'
             st.markdown(sec_html, unsafe_allow_html=True)
 
         # ── 3개 지수 스캔 ─────────────────────────────────────────────
         _indices = [
-            ("sp500",       "S&P 500",      "linear-gradient(135deg,#F0ABFC,#C084FC)", "#A855F7"),
-            ("russell2000", "Russell 2000",  "linear-gradient(135deg,#6EE7B7,#34D399)", "#10B981"),
-            ("kospi100",    "KOSPI 100",     "linear-gradient(135deg,#93C5FD,#60A5FA)", "#3B82F6"),
+            ("sp500",       "S&P 500",      "linear-gradient(135deg,#cbb7fb,#9d7ef0)", "#cbb7fb"),
+            ("russell2000", "Russell 2000",  "linear-gradient(135deg,#1ed760,#17b34f)", "#1ed760"),
+            ("kospi100",    "KOSPI 100",     "linear-gradient(135deg,#f5a623,#e08a0e)", "#f5a623"),
         ]
 
         if st.session_state.all_picks_cache is None:
@@ -851,23 +1058,23 @@ else:  # 📈 종목 분석 (Dashboard)
   <div style="display:flex; gap:18px; align-items:flex-start; margin-bottom:14px">
     <div class="featured-thumb" style="background:{thumb_bg}">📊</div>
     <div style="flex:1">
-      <div style="font-size:0.76rem; color:#94A3B8; margin-bottom:2px">AI 실시간 분석</div>
-      <div style="font-size:1.15rem; font-weight:800; color:#1E293B; margin-bottom:6px">{idx_name}</div>
-      <div style="font-size:0.8rem; color:#1E293B; line-height:1.6">
+      <div style="font-size:0.76rem; color:rgba(233,229,221,.35); margin-bottom:2px">AI 실시간 분석</div>
+      <div style="font-size:1.15rem; font-weight:800; color:#e9e5dd; margin-bottom:6px">{idx_name}</div>
+      <div style="font-size:0.8rem; color:#e9e5dd; line-height:1.6">
         🟢 매수 TOP: {buy_info}<br>
         🔴 매도 TOP: {sell_info}
       </div>
     </div>
   </div>
   <div class="prog-bar">
-    <div class="prog-seg" style="background:#14B8A6"></div>
-    <div class="prog-seg" style="background:#F59E0B"></div>
-    <div class="prog-seg" style="background:#94A3B8; opacity:0.4"></div>
+    <div class="prog-seg" style="background:#1ed760"></div>
+    <div class="prog-seg" style="background:#f5a623"></div>
+    <div class="prog-seg" style="background:rgba(255,255,255,.15)"></div>
   </div>
 </div>""", unsafe_allow_html=True)
 
         # ── "All Picks" 4열 그리드 ────────────────────────────────────
-        st.markdown('<div style="font-size:1.15rem; font-weight:800; color:#1E293B; margin:16px 0 10px">All Picks</div>', unsafe_allow_html=True)
+        st.markdown('<div style="font-size:1.15rem; font-weight:800; color:#e9e5dd; margin:16px 0 10px">All Picks</div>', unsafe_allow_html=True)
 
         # 모든 매수+매도 종목 합치기
         all_cards = []
@@ -890,23 +1097,23 @@ else:  # 📈 종목 분석 (Dashboard)
                         dot_c = "dot-red" if is_sell else "dot-green"
                         border = ' stock-card-alert' if is_sell and '무조건' in lbl else ''
                         score_val = min(c.get('buy_score' if not is_sell else 'sell_score', 30), 100)
-                        lbl_color = '#EF4444' if is_sell else '#0D9488'
+                        lbl_color = '#ff4d4d' if is_sell else '#1ed760'
                         bar_color = '#EF4444' if is_sell else '#14B8A6'
                         st.markdown(f"""<div class="stock-card{border}">
   <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px">
     <div class="stock-thumb" style="background:{c['thumb_bg']}">{c['name'][:1]}</div>
     <div style="flex:1; min-width:0">
-      <div style="font-size:0.72rem; color:#94A3B8">{c['index']} · RSI {c['rsi']:.0f}</div>
-      <div style="font-size:0.9rem; font-weight:700; color:#1E293B; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">{c['name']}</div>
+      <div style="font-size:0.72rem; color:rgba(233,229,221,.35)">{c['index']} · RSI {c['rsi']:.0f}</div>
+      <div style="font-size:0.9rem; font-weight:700; color:#e9e5dd; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">{c['name']}</div>
     </div>
     <div class="dot {dot_c}"></div>
   </div>
   <div style="font-size:0.76rem; font-weight:600; color:{lbl_color}; margin-bottom:2px">{lbl}</div>
-  <div style="font-size:0.72rem; color:#94A3B8">{c['ret_1m']:+.1f}%(1M) · Vol {c['vol_ratio']:.1f}x</div>
+  <div style="font-size:0.72rem; color:rgba(233,229,221,.35)">{c['ret_1m']:+.1f}%(1M) · Vol {c['vol_ratio']:.1f}x</div>
   <div class="prog-bar">
     <div class="prog-seg" style="background:{bar_color}; flex:{score_val/100}"></div>
-    <div class="prog-seg" style="background:#F59E0B; flex:0.15"></div>
-    <div class="prog-seg" style="background:#E2E8F0; flex:{1 - score_val/100}"></div>
+    <div class="prog-seg" style="background:#f5a623; flex:0.15"></div>
+    <div class="prog-seg" style="background:rgba(255,255,255,.1); flex:{1 - score_val/100}"></div>
   </div>
 </div>""", unsafe_allow_html=True)
                         if st.button("📊 세부 분석", key=f"detail_{c['ticker']}_{c['type']}", use_container_width=True):
@@ -926,30 +1133,39 @@ else:  # 📈 종목 분석 (Dashboard)
             _is_sell = (_dc["type"] == "sell")
             _lbl = _dc.get("sell_label" if _is_sell else "buy_label", "")
             _reasons = _dc.get("sell_reasons" if _is_sell else "buy_reasons", [])
-            _border_c = "#EF4444" if _is_sell else "#14B8A6"
+            _border_c = "#ff4d4d" if _is_sell else "#1ed760"
             _cache_key = f"detail_analysis_{_ticker}"
 
-            st.markdown(f"""<div class="glass" style="border-left:4px solid {_border_c}; padding:18px 22px; margin-top:8px">
+            st.markdown(f"""<div class="glass" style="border-left:3px solid {_border_c}; padding:18px 22px; margin-top:8px">
   <div style="display:flex; justify-content:space-between; align-items:center">
-    <div style="font-size:1.1rem; font-weight:800; color:#1E293B">📊 {_dc['name']} ({_ticker}) — 세부 분석</div>
-    <div style="font-size:0.78rem; color:#94A3B8">{_dc['index']} · RSI {_dc['rsi']:.0f} · {_dc['ret_1m']:+.1f}%(1M) · <b style="color:{_border_c}">{_lbl}</b></div>
+    <div style="font-size:1.1rem; font-weight:800; color:#e9e5dd">📊 {_dc['name']} ({_ticker}) — 세부 분석</div>
+    <div style="font-size:0.78rem; color:rgba(233,229,221,.35)">{_dc['index']} · RSI {_dc['rsi']:.0f} · {_dc['ret_1m']:+.1f}%(1M) · <b style="color:{_border_c}">{_lbl}</b></div>
   </div>
 </div>""", unsafe_allow_html=True)
 
             # 캐시에 없으면 데이터 수집
             if _cache_key not in st.session_state:
-                with st.spinner(f"📡 {_ticker} 데이터 수집 + Claude AI 분석 중... (5~10초)"):
-                    _cache = {}
+                _cache = {}
+
+                # ── Step 1: yfinance 데이터 (차트·재무) ───────────────────
+                with st.spinner(f"📡 {_ticker} 시장 데이터 수집 중..."):
                     try:
-                        # 가격 데이터
-                        _hist = _yf.download(_ticker, period="1y", progress=False)
+                        _t_obj = _yf.Ticker(_ticker)
+                        _hist  = _t_obj.history(period="1y", auto_adjust=True)
+                        # Ticker.history()는 항상 단순 컬럼 반환 — MultiIndex 불필요
                         if isinstance(_hist.columns, _pd.MultiIndex):
                             _hist.columns = _hist.columns.get_level_values(0)
+                        if _hist.empty or len(_hist) < 10:
+                            raise ValueError(f"{_ticker} 가격 데이터 부족 ({len(_hist)}행)")
+
                         _close = _hist["Close"].squeeze()
+                        if not isinstance(_close, _pd.Series):
+                            _close = _pd.Series(_close)
+
                         _delta = _close.diff()
                         _gain  = _delta.clip(lower=0).ewm(com=13, adjust=False).mean()
                         _loss  = (-_delta.clip(upper=0)).ewm(com=13, adjust=False).mean()
-                        _rs    = (_gain / _loss.where(_loss != 0, other=1e-9))
+                        _rs    = _gain / _loss.where(_loss != 0, other=1e-9)
                         _hist["RSI"]      = 100 - (100 / (1 + _rs))
                         _hist["BB_mid"]   = _close.rolling(20).mean()
                         _std              = _close.rolling(20).std()
@@ -959,91 +1175,104 @@ else:  # 📈 종목 분석 (Dashboard)
                         _hist["MA200"]    = _close.rolling(200).mean()
                         _cache["hist"]    = _hist
 
-                        # 재무 데이터 (EPS, 순이익 등)
-                        _info = _yf.Ticker(_ticker).info
+                        _info = _t_obj.info
                         _cache["info"] = {
-                            "trailing_eps":     _info.get("trailingEps"),
-                            "forward_eps":      _info.get("forwardEps"),
-                            "net_income":       _info.get("netIncomeToCommon"),
-                            "revenue":          _info.get("totalRevenue"),
-                            "pe":               _info.get("trailingPE"),
-                            "pb":               _info.get("priceToBook"),
-                            "eps_growth":       _info.get("earningsGrowth"),
-                            "revenue_growth":   _info.get("revenueGrowth"),
-                            "profit_margin":    _info.get("profitMargins"),
-                            "roe":              _info.get("returnOnEquity"),
-                            "debt_to_equity":   _info.get("debtToEquity"),
-                            "market_cap":       _info.get("marketCap"),
+                            "trailing_eps":   _info.get("trailingEps"),
+                            "forward_eps":    _info.get("forwardEps"),
+                            "net_income":     _info.get("netIncomeToCommon"),
+                            "revenue":        _info.get("totalRevenue"),
+                            "pe":             _info.get("trailingPE"),
+                            "pb":             _info.get("priceToBook"),
+                            "eps_growth":     _info.get("earningsGrowth"),
+                            "revenue_growth": _info.get("revenueGrowth"),
+                            "profit_margin":  _info.get("profitMargins"),
+                            "roe":            _info.get("returnOnEquity"),
+                            "debt_to_equity": _info.get("debtToEquity"),
+                            "market_cap":     _info.get("marketCap"),
                         }
 
-                        _latest  = float(_hist["Close"].squeeze().iloc[-1])
-                        _prev    = float(_hist["Close"].squeeze().iloc[-2])
-                        _chg_1d  = (_latest / _prev - 1) * 100
-                        _ret_3m  = (_latest / float(_hist["Close"].squeeze().iloc[-min(66,len(_hist)-1)]) - 1) * 100
-                        _rsi_now = float(_hist["RSI"].iloc[-1])
+                        _latest  = float(_close.iloc[-1])
+                        _prev    = float(_close.iloc[-2]) if len(_close) >= 2 else _latest
+                        _chg_1d  = (_latest / _prev - 1) * 100 if _prev else 0.0
+                        _idx_3m  = max(0, len(_close) - min(66, len(_close) - 1))
+                        _ret_3m  = (_latest / float(_close.iloc[_idx_3m]) - 1) * 100 if float(_close.iloc[_idx_3m]) else 0.0
+                        _rsi_raw = _hist["RSI"].iloc[-1]
+                        _rsi_now = float(_rsi_raw) if not _pd.isna(_rsi_raw) else 50.0
                         _cache["price"] = {"latest": _latest, "chg_1d": _chg_1d, "ret_3m": _ret_3m, "rsi": _rsi_now}
+                        _cache["data_ok"] = True
+                    except Exception as _e:
+                        _cache["data_ok"] = False
+                        _cache["data_error"] = str(_e)
 
-                        # Claude AI 분석
-                        _fi = _cache["info"]
-                        def _fmt(v, unit="", pct=False):
-                            if v is None: return "N/A"
-                            if pct: return f"{v*100:+.1f}%"
-                            if abs(v) >= 1e9: return f"{v/1e9:.2f}B{unit}"
-                            if abs(v) >= 1e6: return f"{v/1e6:.2f}M{unit}"
-                            return f"{v:.2f}{unit}"
+                # ── Step 2: Claude AI 분석 (데이터 로드 성공 시에만) ───────
+                if _cache.get("data_ok"):
+                    with st.spinner(f"🤖 Claude AI 분석 중..."):
+                        try:
+                            import config as _cfg
+                            _akey_now = _cfg.ANTHROPIC_API_KEY
+                            if not _akey_now:
+                                _cache["analysis"] = "⚠️ ANTHROPIC_API_KEY 미설정 — API 설정에서 키를 입력하세요."
+                            else:
+                                _fi = _cache["info"]
+                                def _fmt(v, unit="", pct=False):
+                                    if v is None: return "N/A"
+                                    if pct: return f"{v*100:+.1f}%"
+                                    try:
+                                        if abs(v) >= 1e9: return f"{v/1e9:.2f}B{unit}"
+                                        if abs(v) >= 1e6: return f"{v/1e6:.2f}M{unit}"
+                                    except Exception:
+                                        return "N/A"
+                                    return f"{v:.2f}{unit}"
 
-                        _fund_block = f"""[재무 지표]
-주당순이익(EPS, TTM): {_fmt(_fi['trailing_eps'])} / 선행EPS: {_fmt(_fi['forward_eps'])}
-기업순이익(Net Income): {_fmt(_fi['net_income'])}
-매출(Revenue): {_fmt(_fi['revenue'])}
+                                _pv = _cache["price"]
+                                _fund_block = f"""[재무 지표]
+EPS(TTM): {_fmt(_fi['trailing_eps'])} / 선행EPS: {_fmt(_fi['forward_eps'])}
+순이익: {_fmt(_fi['net_income'])} / 매출: {_fmt(_fi['revenue'])}
 PER: {_fmt(_fi['pe'],'x')} / PBR: {_fmt(_fi['pb'],'x')}
-EPS 성장률: {_fmt(_fi['eps_growth'], pct=True)} / 매출 성장률: {_fmt(_fi['revenue_growth'], pct=True)}
-순이익률: {_fmt(_fi['profit_margin'], pct=True)} / ROE: {_fmt(_fi['roe'], pct=True)}
+EPS성장률: {_fmt(_fi['eps_growth'],pct=True)} / 매출성장률: {_fmt(_fi['revenue_growth'],pct=True)}
+순이익률: {_fmt(_fi['profit_margin'],pct=True)} / ROE: {_fmt(_fi['roe'],pct=True)}
 부채비율: {_fmt(_fi['debt_to_equity'],'%')} / 시가총액: {_fmt(_fi['market_cap'])}"""
 
-                        _prompt = f"""종목: {_ticker} ({_dc['name']})
+                                _prompt = f"""종목: {_ticker} ({_dc['name']})
 신호: {'매도 추천' if _is_sell else '매수 추천'} — {_lbl}
-현재가: {_latest:,.2f} | 금일: {_chg_1d:+.2f}% | RSI: {_rsi_now:.1f}
-1개월 수익률: {_dc['ret_1m']:+.1f}% | 5일: {_dc['ret_5d']:+.1f}% | 거래량 비율: {_dc['vol_ratio']:.1f}x
-신호 근거: {', '.join(_reasons)}
+현재가: {_pv['latest']:,.2f} | 금일: {_pv['chg_1d']:+.2f}% | RSI: {_pv['rsi']:.1f}
+1개월: {_dc['ret_1m']:+.1f}% | 5일: {_dc['ret_5d']:+.1f}% | Vol배율: {_dc['vol_ratio']:.1f}x
+근거: {', '.join(_reasons)}
 
 {_fund_block}
 
-위 기술적+재무적 데이터를 종합하여 한국어로 세부 투자 분석을 제공해주세요:
+한국어로 세부 투자 분석:
+1. **기술적 분석** (2문장): RSI·볼린저밴드·거래량
+2. **재무 분석** (2문장): EPS·순이익·PER/PBR·수익성
+3. **{'매도' if _is_sell else '매수'} 근거** (2문장): 기술적+재무 통합
+4. **리스크** (2가지)
+5. **전망 & 전략** (2문장): 단기(1-2주)/중기(1-3개월)"""
 
-1. **기술적 분석** (2문장): RSI·볼린저밴드·거래량 해석
-2. **재무 분석** (2문장): EPS, 순이익, PER/PBR, 수익성 평가
-3. **{'매도' if _is_sell else '매수'} 근거** (2문장): 기술적+재무적 통합 판단
-4. **리스크** (2가지): 투자 시 주의사항
-5. **전망 & 전략** (2문장): 단기(1-2주)/중기(1-3개월) 방향 + 포지션 제언"""
+                                _cli = _anth.Anthropic(api_key=_akey_now)
+                                _msg = _cli.messages.create(
+                                    model="claude-haiku-4-5-20251001",
+                                    max_tokens=1500,
+                                    messages=[{"role": "user", "content": _prompt}],
+                                )
+                                _cache["analysis"] = _msg.content[0].text
+                        except _anth.AuthenticationError:
+                            _cache["analysis"] = "⚠️ API 키 인증 실패 — 유효한 Anthropic API 키를 API 설정에서 입력하세요."
+                        except Exception as _ae:
+                            _cache["analysis"] = f"⚠️ Claude AI 분석 실패: {_ae}"
 
-                        if _akey:
-                            _cli = _anth.Anthropic(api_key=_akey)
-                            _msg = _cli.messages.create(
-                                model="claude-haiku-4-5-20251001",
-                                max_tokens=1500,
-                                messages=[{"role": "user", "content": _prompt}],
-                            )
-                            _cache["analysis"] = _msg.content[0].text
-                        else:
-                            _cache["analysis"] = "ANTHROPIC_API_KEY 미설정"
-
-                        _cache["ok"] = True
-                    except Exception as _e:
-                        _cache["ok"] = False
-                        _cache["error"] = str(_e)
-
+                _cache["ok"] = _cache.get("data_ok", False)
                 st.session_state[_cache_key] = _cache
 
             # 캐시에서 꺼내어 표시
             _c = st.session_state.get(_cache_key, {})
             if not _c.get("ok"):
-                st.error(f"데이터 로드 실패: {_c.get('error', '알 수 없는 오류')}")
+                st.error(f"📡 데이터 로드 실패: {_c.get('data_error', '알 수 없는 오류')}")
+                st.info("잠시 후 다시 시도하거나, 티커 심볼이 올바른지 확인하세요.")
             else:
                 _hist  = _c["hist"]
                 _fi    = _c["info"]
                 _pv    = _c["price"]
-                _sig_c = "#EF4444" if _is_sell else "#0D9488"
+                _sig_c = "#ff4d4d" if _is_sell else "#1ed760"
 
                 _cc1, _cc2 = st.columns([2, 1])
                 with _cc1:
@@ -1061,58 +1290,58 @@ EPS 성장률: {_fmt(_fi['eps_growth'], pct=True)} / 매출 성장률: {_fmt(_fi
                     # 가격 KPI
                     st.markdown(f"""<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px">
   <div class="glass" style="padding:12px; text-align:center">
-    <div style="font-size:0.7rem; color:#94A3B8">현재가</div>
-    <div style="font-size:1.2rem; font-weight:800; color:#1E293B">{_pv['latest']:,.2f}</div>
+    <div style="font-size:0.7rem; color:rgba(233,229,221,.35)">현재가</div>
+    <div style="font-size:1.2rem; font-weight:800; color:#e9e5dd">{_pv['latest']:,.2f}</div>
     <div style="font-size:0.74rem; color:{'#16A34A' if _pv['chg_1d']>=0 else '#EF4444'}">{'▲' if _pv['chg_1d']>=0 else '▼'} {_pv['chg_1d']:+.2f}%</div>
   </div>
   <div class="glass" style="padding:12px; text-align:center">
-    <div style="font-size:0.7rem; color:#94A3B8">RSI(14)</div>
-    <div style="font-size:1.2rem; font-weight:800; color:#1E293B">{_pv['rsi']:.1f}</div>
-    <div style="font-size:0.74rem; color:#64748B">{'과매도' if _pv['rsi']<30 else '과매수' if _pv['rsi']>70 else '중립'}</div>
+    <div style="font-size:0.7rem; color:rgba(233,229,221,.35)">RSI(14)</div>
+    <div style="font-size:1.2rem; font-weight:800; color:#e9e5dd">{_pv['rsi']:.1f}</div>
+    <div style="font-size:0.74rem; color:rgba(233,229,221,.45)">{'과매도' if _pv['rsi']<30 else '과매수' if _pv['rsi']>70 else '중립'}</div>
   </div>
   <div class="glass" style="padding:12px; text-align:center">
-    <div style="font-size:0.7rem; color:#94A3B8">3개월 수익률</div>
+    <div style="font-size:0.7rem; color:rgba(233,229,221,.35)">3개월 수익률</div>
     <div style="font-size:1.2rem; font-weight:800; color:{'#16A34A' if _pv['ret_3m']>=0 else '#EF4444'}">{_pv['ret_3m']:+.1f}%</div>
   </div>
   <div class="glass" style="padding:12px; text-align:center">
-    <div style="font-size:0.7rem; color:#94A3B8">신호</div>
+    <div style="font-size:0.7rem; color:rgba(233,229,221,.35)">신호</div>
     <div style="font-size:0.88rem; font-weight:800; color:{_sig_c}">{_lbl}</div>
   </div>
 </div>""", unsafe_allow_html=True)
 
                     # 재무 지표 카드
-                    _eps_c = "#16A34A" if _fi.get("trailing_eps") and _fi["trailing_eps"] > 0 else "#EF4444"
+                    _eps_c = "#1ed760" if _fi.get("trailing_eps") and _fi["trailing_eps"] > 0 else "#ff4d4d"
                     _ni    = _fi.get("net_income")
-                    _ni_c  = "#16A34A" if _ni and _ni > 0 else "#EF4444"
-                    _eg_c  = "#16A34A" if _fi.get("eps_growth") and _fi["eps_growth"] > 0 else "#EF4444"
+                    _ni_c  = "#1ed760" if _ni and _ni > 0 else "#ff4d4d"
+                    _eg_c  = "#1ed760" if _fi.get("eps_growth") and _fi["eps_growth"] > 0 else "#ff4d4d"
                     st.markdown(f"""<div class="glass" style="padding:14px 16px; margin-bottom:8px">
-  <div style="font-size:0.82rem; font-weight:700; color:#1E293B; margin-bottom:10px">📈 재무 분석 (EPS · 순이익)</div>
+  <div style="font-size:0.82rem; font-weight:700; color:#e9e5dd; margin-bottom:10px">📈 재무 분석 (EPS · 순이익)</div>
   <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px">
-    <div style="background:#F8FAFF; border-radius:10px; padding:10px; text-align:center">
-      <div style="font-size:0.68rem; color:#94A3B8">주당순이익 (EPS)</div>
+    <div style="background:rgba(255,255,255,.04); border-radius:10px; padding:10px; text-align:center">
+      <div style="font-size:0.68rem; color:rgba(233,229,221,.35)">주당순이익 (EPS)</div>
       <div style="font-size:1.05rem; font-weight:800; color:{_eps_c}">{_fv(_fi.get('trailing_eps'))}</div>
-      <div style="font-size:0.68rem; color:#64748B">선행: {_fv(_fi.get('forward_eps'))}</div>
+      <div style="font-size:0.68rem; color:rgba(233,229,221,.45)">선행: {_fv(_fi.get('forward_eps'))}</div>
     </div>
-    <div style="background:#F8FAFF; border-radius:10px; padding:10px; text-align:center">
-      <div style="font-size:0.68rem; color:#94A3B8">기업순이익</div>
+    <div style="background:rgba(255,255,255,.04); border-radius:10px; padding:10px; text-align:center">
+      <div style="font-size:0.68rem; color:rgba(233,229,221,.35)">기업순이익</div>
       <div style="font-size:1.05rem; font-weight:800; color:{_ni_c}">{_fv(_ni)}</div>
-      <div style="font-size:0.68rem; color:#64748B">순이익률 {_fv(_fi.get('profit_margin'), pct=True)}</div>
+      <div style="font-size:0.68rem; color:rgba(233,229,221,.45)">순이익률 {_fv(_fi.get('profit_margin'), pct=True)}</div>
     </div>
-    <div style="background:#F8FAFF; border-radius:10px; padding:10px; text-align:center">
-      <div style="font-size:0.68rem; color:#94A3B8">EPS 성장률</div>
+    <div style="background:rgba(255,255,255,.04); border-radius:10px; padding:10px; text-align:center">
+      <div style="font-size:0.68rem; color:rgba(233,229,221,.35)">EPS 성장률</div>
       <div style="font-size:1.05rem; font-weight:800; color:{_eg_c}">{_fv(_fi.get('eps_growth'), pct=True)}</div>
     </div>
-    <div style="background:#F8FAFF; border-radius:10px; padding:10px; text-align:center">
-      <div style="font-size:0.68rem; color:#94A3B8">매출 성장률</div>
-      <div style="font-size:1.05rem; font-weight:800; color:#3B82F6">{_fv(_fi.get('revenue_growth'), pct=True)}</div>
+    <div style="background:rgba(255,255,255,.04); border-radius:10px; padding:10px; text-align:center">
+      <div style="font-size:0.68rem; color:rgba(233,229,221,.35)">매출 성장률</div>
+      <div style="font-size:1.05rem; font-weight:800; color:#cbb7fb">{_fv(_fi.get('revenue_growth'), pct=True)}</div>
     </div>
-    <div style="background:#F8FAFF; border-radius:10px; padding:10px; text-align:center">
-      <div style="font-size:0.68rem; color:#94A3B8">PER / PBR</div>
-      <div style="font-size:1.05rem; font-weight:800; color:#1E293B">{_fv(_fi.get('pe'),'x')} / {_fv(_fi.get('pb'),'x')}</div>
+    <div style="background:rgba(255,255,255,.04); border-radius:10px; padding:10px; text-align:center">
+      <div style="font-size:0.68rem; color:rgba(233,229,221,.35)">PER / PBR</div>
+      <div style="font-size:1.05rem; font-weight:800; color:#e9e5dd">{_fv(_fi.get('pe'),'x')} / {_fv(_fi.get('pb'),'x')}</div>
     </div>
-    <div style="background:#F8FAFF; border-radius:10px; padding:10px; text-align:center">
-      <div style="font-size:0.68rem; color:#94A3B8">ROE / 부채비율</div>
-      <div style="font-size:1.05rem; font-weight:800; color:#1E293B">{_fv(_fi.get('roe'), pct=True)} / {_fv(_fi.get('debt_to_equity'),'%')}</div>
+    <div style="background:rgba(255,255,255,.04); border-radius:10px; padding:10px; text-align:center">
+      <div style="font-size:0.68rem; color:rgba(233,229,221,.35)">ROE / 부채비율</div>
+      <div style="font-size:1.05rem; font-weight:800; color:#e9e5dd">{_fv(_fi.get('roe'), pct=True)} / {_fv(_fi.get('debt_to_equity'),'%')}</div>
     </div>
   </div>
 </div>""", unsafe_allow_html=True)
@@ -1120,8 +1349,8 @@ EPS 성장률: {_fmt(_fi['eps_growth'], pct=True)} / 매출 성장률: {_fmt(_fi
                     # Claude AI 분석
                     _at = _c.get("analysis", "")
                     st.markdown(f"""<div class="glass" style="padding:14px 16px">
-  <div style="font-size:0.82rem; font-weight:700; color:#0D9488; margin-bottom:8px">🤖 Claude AI 종합 분석</div>
-  <div style="font-size:0.81rem; color:#334155; line-height:1.85">{__import__('re').sub(r'\*\*(.+?)\*\*', r'<b>\1</b>', _at).replace(chr(10), '<br>')}</div>
+  <div style="font-size:0.82rem; font-weight:700; color:#cbb7fb; margin-bottom:8px">🤖 Claude AI 종합 분석</div>
+  <div style="font-size:0.81rem; color:rgba(233,229,221,.8); line-height:1.85">{__import__('re').sub(r'\*\*(.+?)\*\*', r'<b>\1</b>', _at).replace(chr(10), '<br>')}</div>
 </div>""", unsafe_allow_html=True)
 
             if st.button("✕ 세부 분석 닫기", key="close_detail"):
@@ -1145,19 +1374,19 @@ EPS 성장률: {_fmt(_fi['eps_growth'], pct=True)} / 매출 성장률: {_fmt(_fi
                 # 시장 내러티브
                 narrative = theme_result.get("market_narrative", "")
                 if narrative:
-                    st.markdown(f"""<div class="glass" style="padding:16px 20px; border-left:4px solid #14B8A6">
-  <div style="font-size:0.82rem; font-weight:700; color:#0D9488; margin-bottom:6px">🤖 AI 시장 내러티브</div>
-  <div style="font-size:0.88rem; color:#1E293B; line-height:1.7">{narrative}</div>
+                    st.markdown(f"""<div class="glass" style="padding:16px 20px; border-left:3px solid #1ed760">
+  <div style="font-size:0.82rem; font-weight:700; color:#cbb7fb; margin-bottom:6px">🤖 AI 시장 내러티브</div>
+  <div style="font-size:0.88rem; color:#e9e5dd; line-height:1.7">{narrative}</div>
 </div>""", unsafe_allow_html=True)
 
                 # 테마 배지
                 themes = theme_result.get("themes", [])
                 if themes:
-                    theme_html = '<div class="glass" style="padding:14px 18px"><div style="font-size:0.88rem; font-weight:700; color:#1E293B; margin-bottom:10px">🔥 현재 시장 핫 테마</div><div style="display:flex; flex-wrap:wrap; gap:8px">'
+                    theme_html = '<div class="glass" style="padding:14px 18px"><div style="font-size:0.88rem; font-weight:700; color:#e9e5dd; margin-bottom:10px">🔥 현재 시장 핫 테마</div><div style="display:flex; flex-wrap:wrap; gap:8px">'
                     for t in themes:
                         hot = t.get("hot_level", 5)
                         bg = "rgba(239,68,68,0.12)" if hot >= 8 else "rgba(245,158,11,0.12)" if hot >= 5 else "rgba(20,184,166,0.08)"
-                        tc = "#DC2626" if hot >= 8 else "#D97706" if hot >= 5 else "#0D9488"
+                        tc = "#ff4d4d" if hot >= 8 else "#f5a623" if hot >= 5 else "#cbb7fb"
                         fire = "🔥" * min(hot // 3, 3)
                         theme_html += f'<div style="background:{bg}; color:{tc}; padding:6px 14px; border-radius:12px; font-size:0.82rem; font-weight:600">{fire} {t["name"]} <span style="font-weight:400; font-size:0.74rem">({t.get("description","")})</span></div>'
                     theme_html += '</div></div>'
@@ -1166,7 +1395,7 @@ EPS 성장률: {_fmt(_fi['eps_growth'], pct=True)} / 매출 성장률: {_fmt(_fi
                 # 종목별 상세 분석 카드
                 analyses = theme_result.get("picks_analysis", [])
                 if analyses:
-                    st.markdown('<div style="font-size:1.05rem; font-weight:800; color:#1E293B; margin:14px 0 8px">📋 AI 종목 상세 분석</div>', unsafe_allow_html=True)
+                    st.markdown('<div style="font-size:1.05rem; font-weight:800; color:#e9e5dd; margin:14px 0 8px">📋 AI 종목 상세 분석</div>', unsafe_allow_html=True)
                     for a in analyses:
                         ticker = a.get("ticker", "")
                         theme_fit = a.get("theme_fit", "")
@@ -1176,22 +1405,22 @@ EPS 성장률: {_fmt(_fi['eps_growth'], pct=True)} / 매출 성장률: {_fmt(_fi
                         verdict = a.get("verdict", "")
 
                         # verdict 색상
-                        v_color = "#0D9488"
-                        if "매도" in verdict or "무조건" in verdict: v_color = "#DC2626"
+                        v_color = "#1ed760"
+                        if "매도" in verdict or "무조건" in verdict: v_color = "#ff4d4d"
                         elif "몰빵" in verdict or "본부대" in verdict: v_color = "#F97316"
 
                         st.markdown(f"""<div class="glass" style="padding:16px 20px; margin-bottom:10px">
   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px">
-    <div style="font-size:0.95rem; font-weight:800; color:#1E293B">{ticker}</div>
-    <div style="background:rgba(20,184,166,0.1); color:#0D9488; padding:4px 12px; border-radius:10px; font-size:0.76rem; font-weight:600">🏷️ {theme_fit[:40]}</div>
+    <div style="font-size:0.95rem; font-weight:800; color:#e9e5dd">{ticker}</div>
+    <div style="background:rgba(203,183,251,.1); color:#cbb7fb; padding:4px 12px; border-radius:10px; font-size:0.76rem; font-weight:600">🏷️ {theme_fit[:40]}</div>
   </div>
-  <div style="font-size:0.82rem; color:#334155; line-height:1.7; margin-bottom:8px">
-    <b style="color:#0D9488">📊 리포트:</b> {report}
+  <div style="font-size:0.82rem; color:rgba(233,229,221,.8); line-height:1.7; margin-bottom:8px">
+    <b style="color:#cbb7fb">📊 리포트:</b> {report}
   </div>
-  <div style="font-size:0.82rem; color:#334155; line-height:1.7; margin-bottom:8px">
-    <b style="color:#3B82F6">🌊 시장 맥락:</b> {context}
+  <div style="font-size:0.82rem; color:rgba(233,229,221,.8); line-height:1.7; margin-bottom:8px">
+    <b style="color:#cbb7fb">🌊 시장 맥락:</b> {context}
   </div>
-  <div style="font-size:0.8rem; color:#94A3B8; margin-bottom:8px">
+  <div style="font-size:0.8rem; color:rgba(233,229,221,.35); margin-bottom:8px">
     ⚠️ 리스크: {risks}
   </div>
   <div style="background:rgba(0,0,0,0.03); border-radius:10px; padding:8px 14px; font-size:0.85rem; font-weight:700; color:{v_color}">
@@ -1219,6 +1448,8 @@ EPS 성장률: {_fmt(_fi['eps_growth'], pct=True)} / 매출 성장률: {_fmt(_fi
                 cfg.ANTHROPIC_API_KEY = a_key
                 cfg.NEWS_API_KEY      = n_key
                 cfg.GEMINI_API_KEY    = g_key
+                import engine.ai_analyzer as _ai_mod
+                _ai_mod.reset_client()
                 st.success("저장 완료!")
         st.stop()
 
@@ -1297,7 +1528,7 @@ st.markdown(f"""
     <div>
       <div class="section-title" style="font-size:1.3rem">
         {result['company_name']}
-        <span style="font-size:0.9rem; color:#6B7280; font-weight:500; margin-left:8px">{result['ticker']}</span>
+        <span style="font-size:0.9rem; color:rgba(233,229,221,.45); font-weight:500; margin-left:8px">{result['ticker']}</span>
       </div>
       <div class="section-sub">섹터: {result['sector']}  ·  통화: {currency}  ·  Your current stock analysis summary</div>
     </div>
@@ -1390,9 +1621,9 @@ with col_gauge:
       <div class="section-head">
         <div>
           <div class="section-title">Score Overview</div>
-          <div class="section-sub">Golden Bottom 종합 분석 &nbsp;|&nbsp; <span style="font-size:0.68rem; color:#9CA3AF">0–35 관망 · 35–50 중립 · 50–70 매수검토 · 70+ 강력매수</span></div>
+          <div class="section-sub">Golden Bottom 종합 분석 &nbsp;|&nbsp; <span style="font-size:0.68rem; color:rgba(233,229,221,.35)">0–35 관망 · 35–50 중립 · 50–70 매수검토 · 70+ 강력매수</span></div>
         </div>
-        <div style="cursor:pointer; color:#9CA3AF; font-size:1.2rem">⋯</div>
+        <div style="cursor:pointer; color:rgba(233,229,221,.35); font-size:1.2rem">⋯</div>
       </div>
     """, unsafe_allow_html=True)
 
@@ -1404,29 +1635,29 @@ with col_gauge:
     # 하단 2열 지표
     st.markdown(f"""
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:4px">
-        <div style="background:#F8FAFF; border-radius:10px; padding:14px; text-align:center">
-          <div style="font-size:0.75rem; color:#6B7280; margin-bottom:4px">PBR</div>
+        <div style="background:rgba(255,255,255,.04); border-radius:10px; padding:14px; text-align:center">
+          <div style="font-size:0.75rem; color:rgba(233,229,221,.45); margin-bottom:4px">PBR</div>
           <div style="font-size:1.3rem; font-weight:800; color:#1D4ED8">
             {f"{pbr:.2f}x" if pbr else "N/A"}
           </div>
-          <div style="font-size:0.68rem; color:#9CA3AF; margin-top:2px; line-height:1.4">장부가 대비 주가 배수<br>낮을수록 저평가 (1x 미만 관심)</div>
+          <div style="font-size:0.68rem; color:rgba(233,229,221,.35); margin-top:2px; line-height:1.4">장부가 대비 주가 배수<br>낮을수록 저평가 (1x 미만 관심)</div>
         </div>
-        <div style="background:#F8FAFF; border-radius:10px; padding:14px; text-align:center">
-          <div style="font-size:0.75rem; color:#6B7280; margin-bottom:4px">부채비율</div>
+        <div style="background:rgba(255,255,255,.04); border-radius:10px; padding:14px; text-align:center">
+          <div style="font-size:0.75rem; color:rgba(233,229,221,.45); margin-bottom:4px">부채비율</div>
           <div style="font-size:1.3rem; font-weight:800; color:#1D4ED8">
             {f"{dte:.0f}%" if dte else "N/A"}
           </div>
-          <div style="font-size:0.68rem; color:#9CA3AF; margin-top:2px; line-height:1.4">자기자본 대비 부채<br>낮을수록 재무 안정 (100% 미만 양호)</div>
+          <div style="font-size:0.68rem; color:rgba(233,229,221,.35); margin-top:2px; line-height:1.4">자기자본 대비 부채<br>낮을수록 재무 안정 (100% 미만 양호)</div>
         </div>
-        <div style="background:#F8FAFF; border-radius:10px; padding:14px; text-align:center">
-          <div style="font-size:0.75rem; color:#6B7280; margin-bottom:4px">거래량 비율</div>
+        <div style="background:rgba(255,255,255,.04); border-radius:10px; padding:14px; text-align:center">
+          <div style="font-size:0.75rem; color:rgba(233,229,221,.45); margin-bottom:4px">거래량 비율</div>
           <div style="font-size:1.3rem; font-weight:800; color:#1D4ED8">{vol}x</div>
-          <div style="font-size:0.68rem; color:#9CA3AF; margin-top:2px; line-height:1.4">20일 평균 대비 오늘 거래량<br>1.5x 초과 시 세력 관심 급증</div>
+          <div style="font-size:0.68rem; color:rgba(233,229,221,.35); margin-top:2px; line-height:1.4">20일 평균 대비 오늘 거래량<br>1.5x 초과 시 세력 관심 급증</div>
         </div>
-        <div style="background:#F8FAFF; border-radius:10px; padding:14px; text-align:center">
-          <div style="font-size:0.75rem; color:#6B7280; margin-bottom:4px">악재 선반영</div>
+        <div style="background:rgba(255,255,255,.04); border-radius:10px; padding:14px; text-align:center">
+          <div style="font-size:0.75rem; color:rgba(233,229,221,.45); margin-bottom:4px">악재 선반영</div>
           <div style="font-size:1.05rem; font-weight:700; color:#1D4ED8">{bad_priced}</div>
-          <div style="font-size:0.68rem; color:#9CA3AF; margin-top:2px; line-height:1.4">나쁜 뉴스가 주가에 반영됐는지<br>선반영 시 역발상 반등 가능성 ↑</div>
+          <div style="font-size:0.68rem; color:rgba(233,229,221,.35); margin-top:2px; line-height:1.4">나쁜 뉴스가 주가에 반영됐는지<br>선반영 시 역발상 반등 가능성 ↑</div>
         </div>
       </div>
     </div>
@@ -1445,7 +1676,7 @@ with col_layer:
       <div class="section-head">
         <div>
           <div class="section-title">Layer Score Analysis</div>
-          <div class="section-sub">4가지 레이어별 세부 점수 &nbsp;|&nbsp; <span style="font-size:0.68rem; color:#9CA3AF">기술적(30%) · 펀더멘탈(20%) · AI심리(30%) · 수급(20%)</span></div>
+          <div class="section-sub">4가지 레이어별 세부 점수 &nbsp;|&nbsp; <span style="font-size:0.68rem; color:rgba(233,229,221,.35)">기술적(30%) · 펀더멘탈(20%) · AI심리(30%) · 수급(20%)</span></div>
         </div>
       </div>
     """, unsafe_allow_html=True)
@@ -1459,14 +1690,14 @@ with col_layer:
 with col_ai:
     sent = result["sentiment"]
     contrarian = sent["contrarian_signal"]
-    c_color = "#16A34A" if "강한" in contrarian or "매수" in contrarian else "#D97706" if "주의" in contrarian else "#6B7280"
+    c_color = "#1ed760" if "강한" in contrarian or "매수" in contrarian else "#f5a623" if "주의" in contrarian else "rgba(233,229,221,.45)"
 
     st.markdown(f"""
     <div class="section-card">
       <div class="section-head">
         <div>
           <div class="section-title">🤖 AI Sentiment Analysis</div>
-          <div class="section-sub">Claude AI 뉴스 심리 분석 &nbsp;|&nbsp; <span style="font-size:0.68rem; color:#9CA3AF">-10 극단 공포 ~ 0 중립 ~ +10 극단 환희</span></div>
+          <div class="section-sub">Claude AI 뉴스 심리 분석 &nbsp;|&nbsp; <span style="font-size:0.68rem; color:rgba(233,229,221,.35)">-10 극단 공포 ~ 0 중립 ~ +10 극단 환희</span></div>
         </div>
         <div class="section-badge" style="background:#EFF6FF; color:#2563EB">
           Claude AI
@@ -1482,15 +1713,15 @@ with col_ai:
       </div>
 
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px">
-        <div style="background:#F8FAFF; border-radius:10px; padding:14px; text-align:center">
-          <div style="font-size:0.75rem; color:#6B7280; margin-bottom:4px">감성 점수</div>
+        <div style="background:rgba(255,255,255,.04); border-radius:10px; padding:14px; text-align:center">
+          <div style="font-size:0.75rem; color:rgba(233,229,221,.45); margin-bottom:4px">감성 점수</div>
           <div style="font-size:1.6rem; font-weight:800; color:#1D4ED8">{sent['sentiment_raw']:+.1f}</div>
-          <div style="font-size:0.72rem; color:#9CA3AF">-10 공포 ~ +10 환희</div>
+          <div style="font-size:0.72rem; color:rgba(233,229,221,.35)">-10 공포 ~ +10 환희</div>
         </div>
-        <div style="background:#F8FAFF; border-radius:10px; padding:14px; text-align:center">
-          <div style="font-size:0.75rem; color:#6B7280; margin-bottom:4px">역발상 신호</div>
+        <div style="background:rgba(255,255,255,.04); border-radius:10px; padding:14px; text-align:center">
+          <div style="font-size:0.75rem; color:rgba(233,229,221,.45); margin-bottom:4px">역발상 신호</div>
           <div style="font-size:0.9rem; font-weight:700; color:{c_color}; margin-top:4px">{contrarian}</div>
-          <div style="font-size:0.68rem; color:#9CA3AF; margin-top:2px; line-height:1.4">공포 극대화 시 매수 기회<br>강한 매수 신호일수록 반등 가능성 ↑</div>
+          <div style="font-size:0.68rem; color:rgba(233,229,221,.35); margin-top:2px; line-height:1.4">공포 극대화 시 매수 기회<br>강한 매수 신호일수록 반등 가능성 ↑</div>
         </div>
       </div>
     """, unsafe_allow_html=True)
@@ -1508,7 +1739,7 @@ with col_ai:
 
 if not ai_result.get("api_used"):
     st.markdown("""
-    <div class="section-card" style="background:#FFFBEB; border:1px solid #FDE68A; padding:14px 20px">
+    <div class="section-card" style="background:#1e1d2b; border:1px solid rgba(245,166,35,.2); padding:14px 20px">
       <div style="display:flex; align-items:center; gap:10px; color:#92400E; font-size:0.85rem; font-weight:500">
         ⚠️ Claude API 키 미설정 — AI 심리 점수는 중립(50점)으로 적용되었습니다.
         사이드바 또는 아래 설정에서 Anthropic API 키를 입력하면 실제 분석이 가능합니다.
@@ -1531,23 +1762,23 @@ st.markdown(f"""
       <div class="section-title">🛡️ Risk Management Plan</div>
       <div class="section-sub">리스크 관리 플랜 — 매수가 · 손절가 · 목표가 · 권장 비중</div>
     </div>
-    <div class="section-badge" style="background:#F0FDF4; color:#16A34A">R/R: 1:{risk['risk_reward']}</div>
+    <div class="section-badge" style="background:rgba(30,215,96,.1); color:#1ed760">R/R: 1:{risk['risk_reward']}</div>
   </div>
   <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:14px">
     <div class="risk-card">
       <div class="risk-label">진입가 (현재가)</div>
       <div class="risk-value">{sym}{risk['entry_price']:,.2f}</div>
-      <div class="risk-delta" style="color:#6B7280">Entry Price</div>
+      <div class="risk-delta" style="color:rgba(233,229,221,.45)">Entry Price</div>
     </div>
-    <div class="risk-card" style="background:#FFF1F2; border-color:#FECDD3">
+    <div class="risk-card" style="background:rgba(255,77,77,.08); border-color:rgba(255,77,77,.2)">
       <div class="risk-label">손절가</div>
-      <div class="risk-value" style="color:#DC2626">{sym}{risk['stop_loss']:,.2f}</div>
-      <div class="risk-delta" style="color:#DC2626">-{risk['stop_loss_pct']}% Stop Loss</div>
+      <div class="risk-value" style="color:#ff4d4d">{sym}{risk['stop_loss']:,.2f}</div>
+      <div class="risk-delta" style="color:#ff4d4d">-{risk['stop_loss_pct']}% Stop Loss</div>
     </div>
-    <div class="risk-card" style="background:#F0FDF4; border-color:#BBF7D0">
+    <div class="risk-card" style="background:rgba(30,215,96,.08); border-color:rgba(30,215,96,.2)">
       <div class="risk-label">단기 목표가</div>
-      <div class="risk-value" style="color:#16A34A">{sym}{risk['target_price']:,.2f}</div>
-      <div class="risk-delta" style="color:#16A34A">+{target_pct}% Target</div>
+      <div class="risk-value" style="color:#1ed760">{sym}{risk['target_price']:,.2f}</div>
+      <div class="risk-delta" style="color:#1ed760">+{target_pct}% Target</div>
     </div>
     <div class="risk-card" style="background:#F5F3FF; border-color:#DDD6FE">
       <div class="risk-label">권장 비중</div>
@@ -1569,13 +1800,13 @@ sell_signal = sell.get("sell_signal", "🟡 분석 불가")
 
 # 매도 점수 색상
 if sell_score >= 75:
-    sell_s_color = "#DC2626"
+    sell_s_color = "#ff4d4d"
 elif sell_score >= 55:
-    sell_s_color = "#F97316"
+    sell_s_color = "#f5a623"
 elif sell_score >= 40:
-    sell_s_color = "#EAB308"
+    sell_s_color = "#f5a623"
 else:
-    sell_s_color = "#16A34A"
+    sell_s_color = "#1ed760"
 
 col_sell_gauge, col_sell_detail = st.columns([1, 1.6])
 
@@ -1585,7 +1816,7 @@ with col_sell_gauge:
       <div class="section-head">
         <div>
           <div class="section-title">📤 Sell Signal Analysis</div>
-          <div class="section-sub">매도 타이밍 분석 — 기술적 + 수급 결합 &nbsp;|&nbsp; <span style="font-size:0.68rem; color:#9CA3AF">0–40 보유 · 40–55 관망 · 55–75 매도검토 · 75+ 강력매도</span></div>
+          <div class="section-sub">매도 타이밍 분석 — 기술적 + 수급 결합 &nbsp;|&nbsp; <span style="font-size:0.68rem; color:rgba(233,229,221,.35)">0–40 보유 · 40–55 관망 · 55–75 매도검토 · 75+ 강력매도</span></div>
         </div>
         <div class="section-badge" style="background:{'#FEF2F2' if sell_score >= 55 else '#F0FDF4'}; color:{sell_s_color}">{sell_signal}</div>
       </div>
@@ -1610,17 +1841,17 @@ with col_sell_detail:
         st.markdown("**🔴 매도 근거**")
         if sell.get("sell_reasons"):
             for r in sell["sell_reasons"]:
-                st.markdown(f'<span class="risk-tag" style="background:#FEF2F2; border-color:#FECACA; color:#DC2626">⚠ {r}</span>', unsafe_allow_html=True)
+                st.markdown(f'<span class="risk-tag" style="background:#FEF2F2; border-color:#FECACA; color:#ff4d4d">⚠ {r}</span>', unsafe_allow_html=True)
         else:
-            st.markdown('<span style="color:#9CA3AF; font-size:0.85rem">매도 신호 없음</span>', unsafe_allow_html=True)
+            st.markdown('<span style="color:rgba(233,229,221,.35); font-size:0.85rem">매도 신호 없음</span>', unsafe_allow_html=True)
 
     with sell_col_r:
         st.markdown("**🟢 보유 근거**")
         if sell.get("hold_reasons"):
             for r in sell["hold_reasons"]:
-                st.markdown(f'<span class="risk-tag" style="background:#F0FDF4; border-color:#BBF7D0; color:#16A34A">✓ {r}</span>', unsafe_allow_html=True)
+                st.markdown(f'<span class="risk-tag" style="background:rgba(30,215,96,.08); border-color:rgba(30,215,96,.2); color:#1ed760">✓ {r}</span>', unsafe_allow_html=True)
         else:
-            st.markdown('<span style="color:#9CA3AF; font-size:0.85rem">보유 근거 없음</span>', unsafe_allow_html=True)
+            st.markdown('<span style="color:rgba(233,229,221,.35); font-size:0.85rem">보유 근거 없음</span>', unsafe_allow_html=True)
 
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -1642,7 +1873,7 @@ if kis_data and kis_data.get("available") and kis_data.get("summary"):
         </div>
         <div style="display:flex; gap:8px">
           <div class="section-badge" style="background:#EFF6FF; color:#2563EB">🔗 KIS API</div>
-          <div class="section-badge" style="background:{'#F0FDF4' if s.get('foreign_turning') else '#F3F4F6'}; color:{'#16A34A' if s.get('foreign_turning') else '#6B7280'}">
+          <div class="section-badge" style="background:{'rgba(30,215,96,.1)' if s.get('foreign_turning') else 'rgba(255,255,255,.06)'}; color:{'#1ed760' if s.get('foreign_turning') else 'rgba(233,229,221,.45)'}">
             {'🔄 외국인 전환!' if s.get('foreign_turning') else '외국인'}
           </div>
         </div>
@@ -1653,9 +1884,9 @@ if kis_data and kis_data.get("available") and kis_data.get("summary"):
     f_net = s.get("foreign_net_5d", 0)
     i_net = s.get("inst_net_5d", 0)
     p_net = s.get("indiv_net_5d", 0)
-    f_color = "#16A34A" if f_net > 0 else "#DC2626"
-    i_color = "#16A34A" if i_net > 0 else "#DC2626"
-    p_color = "#16A34A" if p_net > 0 else "#DC2626"
+    f_color = "#1ed760" if f_net > 0 else "#ff4d4d"
+    i_color = "#1ed760" if i_net > 0 else "#ff4d4d"
+    p_color = "#1ed760" if p_net > 0 else "#ff4d4d"
 
     st.markdown(f"""
     <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:14px; margin-bottom:16px">
@@ -1667,12 +1898,12 @@ if kis_data and kis_data.get("available") and kis_data.get("summary"):
       <div class="risk-card">
         <div class="risk-label">기관 5일 순매수</div>
         <div class="risk-value" style="color:{i_color}; font-size:1.3rem">{i_net:+,}주</div>
-        <div class="risk-delta" style="color:{'#16A34A' if s.get('inst_turning') else '#6B7280'}">{'🔄 순매수 전환!' if s.get('inst_turning') else '▸ 추이 유지'}</div>
+        <div class="risk-delta" style="color:{'#1ed760' if s.get('inst_turning') else 'rgba(233,229,221,.45)'}">{'🔄 순매수 전환!' if s.get('inst_turning') else '▸ 추이 유지'}</div>
       </div>
       <div class="risk-card">
         <div class="risk-label">개인 5일 순매수</div>
         <div class="risk-value" style="color:{p_color}; font-size:1.3rem">{p_net:+,}주</div>
-        <div class="risk-delta" style="color:#6B7280">▸ 역발상 참고</div>
+        <div class="risk-delta" style="color:rgba(233,229,221,.45)">▸ 역발상 참고</div>
       </div>
       <div class="risk-card" style="background:#F5F3FF; border-color:#DDD6FE">
         <div class="risk-label">외인 소진율</div>
@@ -1719,18 +1950,21 @@ if data["news"]:
 #  API 설정 섹션
 # ══════════════════════════════════════════════════════════════════════════════
 
-with st.expander("⚙️ API 설정 (Gemini · NewsAPI)"):
+with st.expander("⚙️ API 설정 (Claude · NewsAPI)"):
     import config as cfg
-    c1, c2 = st.columns(2)
+    c1, c2, c3 = st.columns(3)
     with c1:
-        g_key = st.text_input("Gemini API Key", value=cfg.GEMINI_API_KEY, type="password", key="g2")
+        a_key2 = st.text_input("Anthropic (Claude) API Key", value=cfg.ANTHROPIC_API_KEY, type="password", key="a2")
     with c2:
+        g_key = st.text_input("Gemini API Key", value=cfg.GEMINI_API_KEY, type="password", key="g2")
+    with c3:
         n_key = st.text_input("NewsAPI Key",    value=cfg.NEWS_API_KEY,   type="password", key="n2")
     if st.button("저장", key="save_keys_bottom"):
+        cfg.ANTHROPIC_API_KEY = a_key2
         cfg.GEMINI_API_KEY = g_key
         cfg.NEWS_API_KEY   = n_key
         import engine.ai_analyzer as _ai
-        _ai._model = None
+        _ai.reset_client()
         st.success("저장 완료!")
 
 
@@ -1739,10 +1973,10 @@ with st.expander("⚙️ API 설정 (Gemini · NewsAPI)"):
 # ══════════════════════════════════════════════════════════════════════════════
 
 st.markdown("""
-<div style="text-align:center; padding:20px 0 8px; color:#9CA3AF; font-size:0.78rem">
+<div style="text-align:center; padding:20px 0 8px; color:rgba(233,229,221,.35); font-size:0.78rem">
   ⚠️ <strong>면책 조항</strong>: 본 분석은 교육 목적으로 제공되며 투자 권유가 아닙니다.
   모든 투자 결정은 투자자 본인의 책임입니다.<br>
-  데이터: yfinance · NewsAPI · Google Gemini &nbsp;|&nbsp;
-  <strong style="color:#3B82F6">Bottom-Fisher AI</strong> © 2025
+  데이터: yfinance · NewsAPI · Anthropic Claude &nbsp;|&nbsp;
+  <strong style="color:#cbb7fb">Bottom-Fisher AI</strong> © 2025
 </div>
 """, unsafe_allow_html=True)

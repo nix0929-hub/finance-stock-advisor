@@ -120,6 +120,7 @@ def run_backtest(
             start=start_date.strftime("%Y-%m-%d"),
             end=end_date.strftime("%Y-%m-%d"),
             progress=False,
+            auto_adjust=True,
         )
     except Exception as exc:
         logger.error("Failed to download data for %s: %s", ticker, exc)

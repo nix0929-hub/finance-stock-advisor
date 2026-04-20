@@ -183,9 +183,9 @@ def load_all(ticker: str) -> dict:
             print(f"[KIS] 수급 데이터 로드 실패: {e}")
             kis_flow = {"available": False}
 
-    # ── 매도 신호 분석 ───────────────────────────────────────────────────────
+    # ── 매도 신호 분석 (이미 수집한 kis_flow 전달 → 중복 KIS API 호출 방지) ──
     try:
-        sell_analysis = analyze_sell_signal(ticker, price_df)
+        sell_analysis = analyze_sell_signal(ticker, price_df, kis_flow=kis_flow)
     except Exception as e:
         print(f"[매도 분석] 실패: {e}")
         sell_analysis = {

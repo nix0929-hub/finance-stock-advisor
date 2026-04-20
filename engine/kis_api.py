@@ -343,9 +343,11 @@ def analyze_flow(ticker: str) -> dict:
 #  매도 신호 분석
 # ══════════════════════════════════════════════════════════════════════════════
 
-def analyze_sell_signal(ticker: str, price_df: pd.DataFrame) -> dict:
+def analyze_sell_signal(ticker: str, price_df: pd.DataFrame, kis_flow: dict = None) -> dict:
     """
     KIS 수급 데이터 + 기술적 지표를 결합한 매도 신호 분석.
+
+    kis_flow: 이미 load_all()에서 수집한 KIS 수급 데이터 (있으면 재호출 방지)
 
     반환 dict:
       sell_score:     0~100 (높을수록 매도 권장)
@@ -404,7 +406,8 @@ def analyze_sell_signal(ticker: str, price_df: pd.DataFrame) -> dict:
 
     # ── KIS 수급 매도 신호 ────────────────────────────────────────────────────
     if is_korean_stock(ticker) and KIS_APP_KEY:
-        flow_data = analyze_flow(ticker)
+        # 이미 수집된 kis_flow가 있으면 재호출 방지 (중복 API 호출 제거)
+        flow_data = kis_flow if (kis_flow and kis_flow.get("available")) else analyze_flow(ticker)
         if flow_data.get("available") and flow_data.get("summary"):
             s = flow_data["summary"]
 

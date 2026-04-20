@@ -2,69 +2,70 @@
 import os
 
 # ─── API Keys ────────────────────────────────────────────────────────────────
-GEMINI_API_KEY    = os.getenv("GEMINI_API_KEY",    "AIzaSyBL_cP81afG6F6_NDXpS0oXuag4WLB4c5I")   # Google AI Studio
-NEWS_API_KEY      = os.getenv("NEWS_API_KEY",      "1f2235fdfdc2420ca85404e9fdaeb249")            # newsapi.org
-def _get_anthropic_key() -> str:
-    """
-    우선순위:
-    1) ANTHROPIC_API_KEY 환경변수
-    2) CLAUDE_CODE_OAUTH_TOKEN 환경변수 (Claude Code 세션 토큰)
-    3) Streamlit st.secrets (앱 내 실행 시)
-    4) .streamlit/secrets.toml 직접 파싱
-    """
-    # 1·2) 환경변수
-    key = os.getenv("ANTHROPIC_API_KEY", "") or os.getenv("CLAUDE_CODE_OAUTH_TOKEN", "")
-    if key:
-        return key
-    # 3) Streamlit secrets
-    try:
-        import streamlit as _st
-        k = _st.secrets.get("ANTHROPIC_API_KEY", "")
-        if k:
-            return k
-    except Exception:
-        pass
-    # 4) secrets.toml 파싱
+GEMINI_API_KEY    = os.getenv("GEMINI_API_KEY",    "")   # 초기값 — _load_secrets_toml() 로드 후 재할당됨
+NEWS_API_KEY      = os.getenv("NEWS_API_KEY",      "")   # 초기값 — _load_secrets_toml() 로드 후 재할당됨
+def _load_secrets_toml() -> dict:
+    """secrets.toml에서 모든 키를 읽어 dict로 반환."""
     try:
         import pathlib, re as _re
         _sec = pathlib.Path(__file__).parent / ".streamlit" / "secrets.toml"
-        if _sec.exists():
-            m = _re.search(r'ANTHROPIC_API_KEY\s*=\s*"([^"]+)"', _sec.read_text(encoding="utf-8"))
-            if m:
-                return m.group(1)
+        if not _sec.exists():
+            return {}
+        text = _sec.read_text(encoding="utf-8")
+        result = {}
+        for m in _re.finditer(r'^(\w+)\s*=\s*"([^"]*)"', text, _re.MULTILINE):
+            result[m.group(1)] = m.group(2)
+        return result
+    except Exception:
+        return {}
+
+
+def _get_anthropic_key() -> str:
+    """
+    Anthropic API 키 로드 우선순위:
+    1) ANTHROPIC_API_KEY 환경변수 (표준 API 키, sk-ant-api- 로 시작)
+    2) secrets.toml의 ANTHROPIC_API_KEY
+    3) Streamlit st.secrets
+
+    ※ CLAUDE_CODE_OAUTH_TOKEN(sk-ant-oat01-)은 OAuth 토큰으로
+      일반 API 호출에 사용 불가 — 의도적으로 제외
+    """
+    # 1) 환경변수 (OAuth 토큰 제외)
+    env_key = os.getenv("ANTHROPIC_API_KEY", "")
+    if env_key and not env_key.startswith("sk-ant-oat"):
+        return env_key
+
+    # 2) secrets.toml
+    secrets = _load_secrets_toml()
+    toml_key = secrets.get("ANTHROPIC_API_KEY", "")
+    if toml_key and not toml_key.startswith("sk-ant-oat"):
+        return toml_key
+
+    # 3) Streamlit st.secrets
+    try:
+        import streamlit as _st
+        k = _st.secrets.get("ANTHROPIC_API_KEY", "")
+        if k and not k.startswith("sk-ant-oat"):
+            return k
     except Exception:
         pass
+
     return ""
 
 
-def _refresh_key_if_needed() -> str:
-    """
-    OAuth 토큰은 세션마다 교체됨.
-    현재 환경변수가 secrets.toml과 다르면 secrets.toml을 자동 갱신.
-    """
-    env_key = os.getenv("ANTHROPIC_API_KEY", "") or os.getenv("CLAUDE_CODE_OAUTH_TOKEN", "")
-    if not env_key:
-        return _get_anthropic_key()
-
-    # secrets.toml 갱신
-    try:
-        import pathlib
-        _sec = pathlib.Path(__file__).parent / ".streamlit" / "secrets.toml"
-        current = _sec.read_text(encoding="utf-8") if _sec.exists() else ""
-        if env_key not in current:
-            _sec.parent.mkdir(exist_ok=True)
-            _sec.write_text(f'ANTHROPIC_API_KEY = "{env_key}"\n', encoding="utf-8")
-    except Exception:
-        pass
-    return env_key
-
-
-ANTHROPIC_API_KEY = _refresh_key_if_needed()  # Anthropic Claude API
+ANTHROPIC_API_KEY = _get_anthropic_key()  # Anthropic Claude API
 
 # ─── 한국투자증권 API ──────────────────────────────────────────────────────────
-KIS_APP_KEY    = os.getenv("KIS_APP_KEY",    "PSq2C6SKYHdV2BCeRwouqGkwwosATUpkwpw5")
-KIS_APP_SECRET = os.getenv("KIS_APP_SECRET", "/BgfJldjxZZ2EYeZIlhOcPIPQBUxm640s7cac8X+xZ7HnKXQLUK53FdBtavgAR7Bjdhj/2TIrCH9M7AdPn4Zuo6pWASyldi6ERdLZ+dhlOD5jYLC9xZBQHMyxXwX6vAFop/v4J6WG6XU6p+uEn2PothdUEUJPQH4yiy5rKNZ6XnUtpbqbVM=")
-KIS_ACCOUNT_NO = os.getenv("KIS_ACCOUNT_NO", "")       # 계좌번호 (예: 50123456-01)
+_secrets = _load_secrets_toml()
+KIS_APP_KEY    = os.getenv("KIS_APP_KEY",    _secrets.get("KIS_APP_KEY", ""))
+KIS_APP_SECRET = os.getenv("KIS_APP_SECRET", _secrets.get("KIS_APP_SECRET", ""))
+KIS_ACCOUNT_NO = os.getenv("KIS_ACCOUNT_NO", _secrets.get("KIS_ACCOUNT_NO", ""))
+
+# secrets.toml에서 GEMINI/NEWS 키도 재로드 (환경변수 없을 경우)
+if not GEMINI_API_KEY:
+    GEMINI_API_KEY = _secrets.get("GEMINI_API_KEY", "")
+if not NEWS_API_KEY:
+    NEWS_API_KEY = _secrets.get("NEWS_API_KEY", "")
 KIS_IS_PAPER   = True                                   # True=모의투자, False=실거래
 
 # ─── Scoring Weights ──────────────────────────────────────────────────────────

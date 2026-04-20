@@ -196,7 +196,8 @@ def flow_score(price_df: pd.DataFrame, kis_flow: dict = None) -> dict:
 
     # ── 거래량 이동평균 대비 ───────────────────────────────────────────────────
     vol_ma20 = vol.rolling(20).mean()
-    latest_vol_ratio = float(vol.iloc[-1] / vol_ma20.iloc[-1]) if vol_ma20.iloc[-1] > 0 else 1.0
+    _vma_last = vol_ma20.iloc[-1]
+    latest_vol_ratio = float(vol.iloc[-1] / _vma_last) if (not pd.isna(_vma_last) and _vma_last > 0) else 1.0
 
     if latest_vol_ratio >= 3.0:     scores["vol_surge"] = 100
     elif latest_vol_ratio >= 2.0:   scores["vol_surge"] = 75
