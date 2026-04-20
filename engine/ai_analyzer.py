@@ -11,7 +11,7 @@ import re
 
 import anthropic
 
-from config import ANTHROPIC_API_KEY
+from config import _get_anthropic_key
 
 # ── Anthropic 클라이언트 싱글턴 (호출마다 재생성 방지) ───────────────────────
 _client: anthropic.Anthropic | None = None
@@ -19,9 +19,10 @@ _client: anthropic.Anthropic | None = None
 def _get_client() -> anthropic.Anthropic:
     global _client
     if _client is None:
-        if not ANTHROPIC_API_KEY:
+        api_key = _get_anthropic_key()   # 런타임에 호출 → st.secrets 정상 동작
+        if not api_key:
             raise ValueError("ANTHROPIC_API_KEY 미설정 — config.py 또는 환경변수를 확인하세요.")
-        _client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+        _client = anthropic.Anthropic(api_key=api_key)
     return _client
 
 

@@ -13,7 +13,7 @@ import anthropic
 import requests
 import yfinance as yf
 
-from config import ANTHROPIC_API_KEY, NEWS_API_KEY
+from config import _get_anthropic_key, NEWS_API_KEY
 
 logger = logging.getLogger(__name__)
 
@@ -165,12 +165,13 @@ def _build_analysis_prompt(
 
 def _call_claude(prompt: str) -> Optional[dict[str, Any]]:
     """Call Claude API and parse the JSON response."""
-    if not ANTHROPIC_API_KEY:
+    api_key = _get_anthropic_key()
+    if not api_key:
         logger.warning("ANTHROPIC_API_KEY is not configured; skipping AI analysis.")
         return None
 
     try:
-        client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+        client = anthropic.Anthropic(api_key=api_key)
         message = client.messages.create(
             model="claude-haiku-4-5-20251001",
             max_tokens=4096,
