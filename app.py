@@ -387,10 +387,13 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 import traceback
+import datetime
+import pytz
 from engine.data_loader    import load_all
 from engine.ai_analyzer    import analyze_sentiment
 from engine.strategy       import run_full_analysis
 from engine.kis_api        import is_korean_stock, check_api_status
+from engine.kr_stocks      import resolve_ticker, search_kr_companies
 from engine.market_heatmap import scan_index, get_top_picks, create_treemap
 from engine.market_overview import fetch_market_overview
 from engine.theme_analyzer  import analyze_market_themes
@@ -406,6 +409,41 @@ from ui.components         import (
     radar_chart_modern, layer_score_bar, investor_flow_chart,
     sell_gauge_chart,
 )
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  캐시 TTL 유틸
+# ══════════════════════════════════════════════════════════════════════════════
+
+def _market_ttl() -> int:
+    """장중(KST 09:00~15:30 또는 EST 09:30~16:00)이면 300초, 아니면 3600초."""
+    try:
+        now_kst = datetime.datetime.now(pytz.timezone("Asia/Seoul"))
+        now_est = datetime.datetime.now(pytz.timezone("America/New_York"))
+        wd = now_kst.weekday()
+        if wd < 5:
+            kst_t = now_kst.time()
+            est_t = now_est.time()
+            if (datetime.time(9, 0) <= kst_t <= datetime.time(15, 30) or
+                    datetime.time(9, 30) <= est_t <= datetime.time(16, 0)):
+                return 300
+    except Exception:
+        pass
+    return 3600
+
+
+def _cache_valid(key: str) -> bool:
+    if st.session_state.get(key) is None:
+        return False
+    ts = st.session_state.get(f"{key}_ts")
+    if ts is None:
+        return False
+    return (datetime.datetime.now() - ts).total_seconds() < _market_ttl()
+
+
+def _set_cache(key: str, value) -> None:
+    st.session_state[key] = value
+    st.session_state[f"{key}_ts"] = datetime.datetime.now()
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -954,12 +992,24 @@ else:  # 📈 종목 분석 (Dashboard)
     # ── 검색 바 ────────────────────────────────────────────────────────────
     col_search, col_btn, col_spacer = st.columns([3, 1, 4])
     with col_search:
-        ticker_input = st.text_input(
+        raw_input = st.text_input(
             "종목 티커",
             value="AAPL",
-            placeholder="예: AAPL, TSLA, 005930.KS",
+            placeholder="예: AAPL, TSLA, 삼성전자, 카카오, 현대차",
             label_visibility="collapsed",
-        ).strip().upper()
+        ).strip()
+        ticker_input = resolve_ticker(raw_input)
+        # 한글 입력 → 티커 변환 시 힌트 표시
+        if any("\uAC00" <= c <= "\uD7A3" for c in raw_input) and ticker_input != raw_input:
+            st.caption(f"🔄 {raw_input} → **{ticker_input}**")
+        elif any("\uAC00" <= c <= "\uD7A3" for c in raw_input) and ticker_input == raw_input:
+            # 못 찾은 경우 유사 종목 제안
+            suggestions = search_kr_companies(raw_input)
+            if suggestions:
+                names = ", ".join(f"{s['name']}({s['ticker']})" for s in suggestions[:3])
+                st.caption(f"💡 혹시 이 종목? {names}")
+            else:
+                st.caption("❌ 종목을 찾을 수 없습니다. 티커 직접 입력: 예) 005930.KS")
     with col_btn:
         run_btn = st.button("🔍  분석 시작", use_container_width=True)
 
@@ -980,10 +1030,10 @@ else:  # 📈 종목 분석 (Dashboard)
                 del st.session_state[k]
             st.rerun()
 
-        # ── 시장 흐름 분석 (캐시) ──────────────────────────────────────
-        if st.session_state.mkt_cache is None:
+        # ── 시장 흐름 분석 (TTL 캐시) ─────────────────────────────────
+        if not _cache_valid("mkt_cache"):
             with st.spinner("📡 글로벌 시장 데이터 수집 중..."):
-                st.session_state.mkt_cache = fetch_market_overview()
+                _set_cache("mkt_cache", fetch_market_overview())
         mkt = st.session_state.mkt_cache
 
         # 시장 방향 + Fear & Greed
